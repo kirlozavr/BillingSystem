@@ -25,7 +25,7 @@ public class PayloadController {
     }
 
     @GetMapping("/")
-    public List<PayloadDto> getAllPayloads(){
+    public List<PayloadDto> getAllPayloads() {
         return StreamSupport
                 .stream(service.getAllPayloads().spliterator(), false)
                 .map(mapper::getEntityToDto)
@@ -33,13 +33,13 @@ public class PayloadController {
     }
 
     @GetMapping(path = "/id={payloadId}")
-    public PayloadDto findById(@PathVariable("payloadId") Long payloadId){
+    public PayloadDto findById(@PathVariable("payloadId") Long payloadId) {
         return mapper
                 .getEntityToDto(service.getPayload(payloadId));
     }
 
     @PostMapping
-    public void postPayload(@RequestBody PayloadCreateDto createDto){
+    public void postPayload(@RequestBody PayloadCreateDto createDto) {
         service.createPayload(mapper.getCreateDtoToEntity(createDto));
     }
 
@@ -47,31 +47,31 @@ public class PayloadController {
     public void putPayload(
             @PathVariable("payloadId") Long payloadId,
             @RequestBody PayloadCreateDto createDto
-    ){
+    ) {
         PayloadEntity payloadEntity = service.getPayload(payloadId);
 
-        if(createDto.getCallType() != null &&
-                createDto.getCallType().length() >0 &&
-                !createDto.getCallType().equals(payloadEntity.getCallType())){
+        if (createDto.getCallType() != null &&
+                createDto.getCallType().length() > 0 &&
+                !createDto.getCallType().equals(payloadEntity.getCallType())) {
             payloadEntity.setCallType(createDto.getCallType());
         }
-        if(createDto.getStartTime() != null &&
-                createDto.getStartTime().length() >0 &&
-                !createDto.getStartTime().equals(payloadEntity.getStartTime())){
+        if (createDto.getStartTime() != null &&
+                createDto.getStartTime().length() > 0 &&
+                !createDto.getStartTime().equals(payloadEntity.getStartTime())) {
             payloadEntity.setStartTime(createDto.getStartTime());
         }
-        if(createDto.getEndTime() != null &&
-                createDto.getEndTime().length() >0 &&
-                !createDto.getEndTime().equals(payloadEntity.getEndTime())){
+        if (createDto.getEndTime() != null &&
+                createDto.getEndTime().length() > 0 &&
+                !createDto.getEndTime().equals(payloadEntity.getEndTime())) {
             payloadEntity.setEndTime(createDto.getEndTime());
         }
-        if(createDto.getDuration() != null &&
-                createDto.getDuration().length() >0 &&
-                !createDto.getDuration().equals(payloadEntity.getDuration())){
+        if (createDto.getDuration() != null &&
+                createDto.getDuration().length() > 0 &&
+                !createDto.getDuration().equals(payloadEntity.getDuration())) {
             payloadEntity.setDuration(createDto.getDuration());
         }
-        if(createDto.getCost() > 0.0f &&
-                !FloatCompare.isEquals(createDto.getCost(), payloadEntity.getCost())){
+        if (createDto.getCost() > 0.0f &&
+                !FloatCompare.isEquals(createDto.getCost(), payloadEntity.getCost())) {
             payloadEntity.setCost(createDto.getCost());
         }
 
@@ -79,7 +79,7 @@ public class PayloadController {
     }
 
     @DeleteMapping("/{payloadId}")
-    public void deletePayload(@PathVariable("payloadId") Long payloadId){
+    public void deletePayload(@PathVariable("payloadId") Long payloadId) {
         service.deletePayload(payloadId);
     }
 }
