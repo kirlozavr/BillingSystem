@@ -3,7 +3,6 @@ package com.application.billingsystem.services;
 import com.application.billingsystem.entity.PayloadEntity;
 import com.application.billingsystem.exceptions.PayloadNotFoundException;
 import com.application.billingsystem.repositories.PayloadRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,16 +27,16 @@ public class PayloadService {
     }
 
     @Transactional
-    public PayloadEntity createPayload(PayloadEntity payload) {
-        return repository.save(payload);
+    public void createPayload(PayloadEntity payload) {
+        repository.save(payload);
     }
 
     @Transactional
-    public PayloadEntity updatePayload(PayloadEntity payload) {
+    public void updatePayload(PayloadEntity payload) {
         if (!repository.existsById(payload.getId())) {
             throw new PayloadNotFoundException("Payload not found");
         }
-        return repository.save(payload);
+        repository.save(payload);
     }
 
     @Transactional
