@@ -4,7 +4,7 @@ import com.application.billingsystem.FloatCompare;
 import com.application.billingsystem.dto.TariffCreateDto;
 import com.application.billingsystem.dto.TariffDto;
 import com.application.billingsystem.entity.TariffEntity;
-import com.application.billingsystem.mappers.TariffMapper;
+import com.application.billingsystem.mapping.TariffMapper;
 import com.application.billingsystem.services.TariffService;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +25,7 @@ public class TariffController {
     @GetMapping("/")
     public List<TariffDto> getAllTariff(){
         return StreamSupport
-                .stream(service.gelAllTariff().spliterator(), false)
+                .stream(service.gelAllTariffs().spliterator(), false)
                 .map(mapper::getEntityToDto)
                 .toList();
     }
@@ -44,7 +44,7 @@ public class TariffController {
 
     @PostMapping
     public void postTariff(@RequestBody TariffCreateDto createDto){
-        service.setNewTariff(mapper.getCreateDtoToEntity(createDto));
+        service.createTariff(mapper.getCreateDtoToEntity(createDto));
     }
 
     @PutMapping(path = "/{tariffId}")

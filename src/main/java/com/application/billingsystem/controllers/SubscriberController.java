@@ -4,7 +4,7 @@ import com.application.billingsystem.FloatCompare;
 import com.application.billingsystem.dto.SubscriberCreateDto;
 import com.application.billingsystem.dto.SubscriberDto;
 import com.application.billingsystem.entity.SubscriberEntity;
-import com.application.billingsystem.mappers.SubscriberMapper;
+import com.application.billingsystem.mapping.SubscriberMapper;
 import com.application.billingsystem.services.SubscriberService;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,7 +44,7 @@ public class SubscriberController {
 
     @PostMapping
     public void postSubscriber(@RequestBody SubscriberCreateDto createDto){
-        service.setNewSubscriber(mapper.getCreateDtoToEntity(createDto));
+        service.createSubscriber(mapper.getCreateDtoToEntity(createDto));
     }
 
     @PutMapping(path = "/{subscriberId}")

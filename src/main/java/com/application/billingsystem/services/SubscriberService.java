@@ -23,32 +23,37 @@ public class SubscriberService {
 
     public SubscriberEntity getSubscriber(Long subscriberId){
         return repository.findById(subscriberId)
-                .orElseThrow(() -> new SubscriberNotFoundException("Абонент не найден"));
+                .orElseThrow(() -> new SubscriberNotFoundException("Subscriber not found"));
     }
 
     public SubscriberEntity getSubscriber(String numberPhone){
         return repository.findSubscriberEntityByNumberPhone(numberPhone)
-                .orElseThrow(() -> new SubscriberNotFoundException("Абонент не найден"));
+                .orElseThrow(() -> new SubscriberNotFoundException("Subscriber not found"));
     }
 
-    public void setNewSubscriber(SubscriberEntity subscriber){
+    @Transactional
+    public void createSubscriber(SubscriberEntity subscriber){
         var subscriberOptional = repository
                 .findSubscriberEntityByNumberPhone(subscriber.getNumberPhone());
         if(subscriberOptional.isPresent()){
-            throw new SubscriberNotFoundException("Абонент сущесвует");
+            throw new SubscriberNotFoundException("Subscriber is exists");
         }
         repository.save(subscriber);
     }
 
     @Transactional
     public void updateSubscriber(SubscriberEntity subscriber){
+        if (!repository.existsById(subscriber.getId())) {
+            throw new SubscriberNotFoundException("Subscriber not found");
+        }
         repository.save(subscriber);
     }
 
+    @Transactional
     public void deleteSubscriber(Long subscriberId){
         var existsSubscriber = repository.existsById(subscriberId);
         if(!existsSubscriber){
-            throw new SubscriberNotFoundException("Абонента не существует");
+            throw new SubscriberNotFoundException("Subscriber is not exists");
         }
         repository.deleteById(subscriberId);
     }
