@@ -2,7 +2,6 @@ package com.application.billingsystem.services;
 
 import com.application.billingsystem.entity.PayloadEntity;
 import com.application.billingsystem.exceptions.PayloadNotFoundException;
-import com.application.billingsystem.exceptions.SubscriberNotFoundException;
 import com.application.billingsystem.repositories.PayloadRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,10 +42,10 @@ public class PayloadService {
 
     @Transactional
     public void deletePayload(long payloadId) {
-        try {
-            repository.deleteById(payloadId);
-        } catch (EntityNotFoundException e) {
+        var existsPayload = repository.existsById(payloadId);
+        if(!existsPayload){
             throw new PayloadNotFoundException("Payload is not exists");
         }
+        repository.deleteById(payloadId);
     }
 }
