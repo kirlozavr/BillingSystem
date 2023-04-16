@@ -15,7 +15,7 @@ public class TariffEntity {
             allocationSize = 1
     )
     @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
+            strategy = GenerationType.AUTO,
             generator = "tariff_id_seq"
     )
     private long id;
