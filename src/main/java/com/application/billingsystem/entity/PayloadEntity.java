@@ -15,13 +15,13 @@ public class PayloadEntity {
 
     @Id
     @SequenceGenerator(
-            name = "tariff_id_seq",
-            sequenceName = "tariff_id_seq",
+            name = "payload_id_seq",
+            sequenceName = "payload_id_seq",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.AUTO,
-            generator = "tariff_id_seq"
+            generator = "payload_id_seq"
     )
     private long id;
     private String callType;
