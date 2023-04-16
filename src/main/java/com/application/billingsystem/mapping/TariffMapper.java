@@ -1,10 +1,11 @@
-package com.application.billingsystem.mappers;
+package com.application.billingsystem.mapping;
 
 import com.application.billingsystem.dto.TariffCreateDto;
 import com.application.billingsystem.dto.TariffDto;
 import com.application.billingsystem.entity.TariffEntity;
+import com.application.billingsystem.mapping.Mapper;
 
-public class TariffMapper implements Mapper<TariffEntity, TariffDto>{
+public class TariffMapper implements Mapper<TariffEntity, TariffDto> {
 
     @Override
     public TariffDto getEntityToDto(TariffEntity entity) {

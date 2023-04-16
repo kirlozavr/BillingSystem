@@ -1,4 +1,4 @@
-package com.application.billingsystem.mappers;
+package com.application.billingsystem.mapping;
 
 public interface Mapper <E, D>{
 

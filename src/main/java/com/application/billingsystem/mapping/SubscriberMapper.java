@@ -1,10 +1,11 @@
-package com.application.billingsystem.mappers;
+package com.application.billingsystem.mapping;
 
 import com.application.billingsystem.dto.SubscriberCreateDto;
 import com.application.billingsystem.dto.SubscriberDto;
 import com.application.billingsystem.entity.SubscriberEntity;
+import com.application.billingsystem.mapping.Mapper;
 
-public class SubscriberMapper implements Mapper<SubscriberEntity, SubscriberDto>{
+public class SubscriberMapper implements Mapper<SubscriberEntity, SubscriberDto> {
 
 
     @Override
