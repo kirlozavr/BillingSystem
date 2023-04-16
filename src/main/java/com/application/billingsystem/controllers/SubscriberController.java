@@ -36,7 +36,7 @@ public class SubscriberController {
                 .getEntityToDto(service.getSubscriber(subscriberId));
     }
 
-    @GetMapping(path = "/numer_phone={numberPhone}")
+    @GetMapping(path = "/number_phone={numberPhone}")
     public SubscriberDto findByNumberPhone(@PathVariable("numberPhone") String numberPhone){
         return mapper
                 .getEntityToDto(service.getSubscriber(numberPhone));
