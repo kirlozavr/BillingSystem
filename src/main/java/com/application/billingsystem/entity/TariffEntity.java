@@ -1,9 +1,11 @@
 package com.application.billingsystem.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@ToString
 @Entity
 @Table(name = "tariff")
 public class TariffEntity {
@@ -49,5 +51,17 @@ public class TariffEntity {
         this.inBet = inBet;
         this.subscriberPayment = subscriberPayment;
         this.monetaryUnit = monetaryUnit;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TariffEntity that)) return false;
+        return id == that.id && Float.compare(that.minuteLimit, minuteLimit) == 0 && Float.compare(that.outBet, outBet) == 0 && Float.compare(that.outBetAfterLimit, outBetAfterLimit) == 0 && Float.compare(that.inBet, inBet) == 0 && Float.compare(that.subscriberPayment, subscriberPayment) == 0 && tariffIndex.equals(that.tariffIndex) && nameTariff.equals(that.nameTariff) && monetaryUnit.equals(that.monetaryUnit);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }
