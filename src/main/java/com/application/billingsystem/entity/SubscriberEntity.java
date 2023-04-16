@@ -1,12 +1,34 @@
 package com.application.billingsystem.entity;
 
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@Entity
+@Table(name = "subscriber")
 public class SubscriberEntity {
 
-    private final long id;
-    private final String numberPhone;
-    private final String tariffId;
-    private final float balance;
+    @Id
+    @SequenceGenerator(
+            name = "subscriber_id_seq",
+            sequenceName = "subscriber_id_seq",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.AUTO,
+            generator = "subscriber_id_seq"
+    )
+    private long id;
+    private String numberPhone;
+    private String tariffIndex;
+    private float balance;
+
+    public SubscriberEntity(String numberPhone, String tariffIndex, float balance) {
+        this.numberPhone = numberPhone;
+        this.tariffIndex = tariffIndex;
+        this.balance = balance;
+    }
 }
