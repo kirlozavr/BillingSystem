@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  postgres:
+    image: 'postgres:15'
+    container_name: 'billing'
+    ports:
+      - "5432:5432"
+    environment:
+      - 'POSTGRES_USER=billing'
+      - 'POSTGRES_PASSWORD=billing'
+      - 'POSTGRES_HOST_AUTH_METHOD=trust'
+      - 'POSTGRES_DB=java'
