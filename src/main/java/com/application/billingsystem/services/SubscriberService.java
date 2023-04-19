@@ -31,6 +31,12 @@ public class SubscriberService {
                 .orElseThrow(() -> new SubscriberNotFoundException("Subscriber not found"));
     }
 
+    public SubscriberEntity getSubscriberByNumberPhoneAndPositiveBalance(String numberPhone){
+        return repository
+                .findSubscriberEntityByNumberPhoneAndBalanceGreaterThan(numberPhone, 0)
+                .orElse(null);
+    }
+
     @Transactional
     public void createSubscriber(SubscriberEntity subscriber){
         var subscriberOptional = repository

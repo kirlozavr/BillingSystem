@@ -1,6 +1,6 @@
 package com.application.billingsystem.controllers;
 
-import com.application.billingsystem.FloatCompare;
+import com.application.billingsystem.main.FloatCompare;
 import com.application.billingsystem.dto.SubscriberCreateDto;
 import com.application.billingsystem.dto.SubscriberDto;
 import com.application.billingsystem.entity.SubscriberEntity;
@@ -36,10 +36,16 @@ public class SubscriberController {
                 .getEntityToDto(service.getSubscriber(subscriberId));
     }
 
-    @GetMapping(path = "/number_phone={numberPhone}")
+    @GetMapping(path = "/number={numberPhone}")
     public SubscriberDto findByNumberPhone(@PathVariable("numberPhone") String numberPhone){
         return mapper
                 .getEntityToDto(service.getSubscriber(numberPhone));
+    }
+
+    @GetMapping(path = "/number_phone={numberPhone}")
+    public SubscriberDto findByNumberPhoneAndPositiveBalance(@PathVariable("numberPhone") String numberPhone){
+        return mapper
+                .getEntityToDto(service.getSubscriberByNumberPhoneAndPositiveBalance(numberPhone));
     }
 
     @PostMapping
