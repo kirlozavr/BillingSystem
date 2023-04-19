@@ -1,4 +1,4 @@
-package com.application.billingsystem;
+package com.application.billingsystem.main;
 
 public class FloatCompare {
 

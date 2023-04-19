@@ -1,6 +1,6 @@
 package com.application.billingsystem.controllers;
 
-import com.application.billingsystem.FloatCompare;
+import com.application.billingsystem.main.FloatCompare;
 import com.application.billingsystem.dto.PayloadCreateDto;
 import com.application.billingsystem.dto.PayloadDto;
 import com.application.billingsystem.entity.PayloadEntity;
