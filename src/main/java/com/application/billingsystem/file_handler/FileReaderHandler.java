@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Класс отвечает за чтение CDR И CDR+ **/
+/** Класс отвечает за чтение CDR И CDR+. Решил не отправлять ссылку на сохраненный файл, а просто сделать их статичными. **/
 public class FileReaderHandler {
 
     /** Метод читает CDR файл и возвращает список **/

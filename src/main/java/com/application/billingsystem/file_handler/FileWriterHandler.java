@@ -8,7 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-/** Класс отвечает за запись CDR и CDR+ файла.
+/** Класс отвечает за запись CDR и CDR+ файла. Решил не отправлять ссылку на сохраненный файл, а просто сделать их статичными.
  * Файлы будут каждый раз перезаписываться (при каждой тарификации файл будет обновляться). **/
 public class FileWriterHandler {
 
