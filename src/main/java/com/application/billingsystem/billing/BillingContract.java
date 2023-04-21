@@ -1,4 +1,4 @@
-package com.application.billingsystem.main;
+package com.application.billingsystem.billing;
 
 import org.springframework.stereotype.Component;
 
@@ -10,13 +10,17 @@ import org.springframework.stereotype.Component;
  **/
 @Component
 public interface BillingContract {
+
+    interface CDR{
+
+    }
     interface BRT<E> {
-        void run();
+        void run(String filePath);
 
         void putAndUpdateDataToDatabase(E entity);
     }
 
     interface HRS {
-        void run();
+        void run(String filePath);
     }
 }
