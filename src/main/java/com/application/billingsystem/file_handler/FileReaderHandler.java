@@ -9,15 +9,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Класс отвечает за чтение CDR И CDR+. Решил не отправлять ссылку на сохраненный файл, а просто сделать их статичными. **/
-public class FileReaderHandler {
+/**
+ * Класс отвечает за чтение CDR И CDR+.
+ **/
+public class FileReaderHandler extends FileHandler {
 
-    /** Метод читает CDR файл и возвращает список **/
-    public static List<CallDataRecordEntity> readCDRFileAndReturnListEntity() {
+
+    /**
+     * Метод читает CDR файл и возвращает список
+     **/
+    public static List<CallDataRecordEntity> readCDRFileAndReturnListEntity(String path) {
         List<CallDataRecordEntity> callDataRecordEntityList = new ArrayList<>();
 
         try {
-            FileReader fileReader = new FileReader("\\src\\main\\resources\\cdr_file\\CDR");
+            FileReader fileReader = new FileReader(path);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
             String line;
@@ -40,12 +45,14 @@ public class FileReaderHandler {
         return callDataRecordEntityList;
     }
 
-    /** Метод читает CDR+ файл и возвращает список **/
-    public static List<CallDataRecordPlusEntity> readCDRPlusFileAndReturnListEntity() {
+    /**
+     * Метод читает CDR+ файл и возвращает список
+     **/
+    public static List<CallDataRecordPlusEntity> readCDRPlusFileAndReturnListEntity(String path) {
         List<CallDataRecordPlusEntity> callDataRecordPlusEntityList = new ArrayList<>();
 
         try {
-            FileReader fileReader = new FileReader("\\src\\main\\resources\\cdr_file\\PlusCDR");
+            FileReader fileReader = new FileReader(path);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
             String line;
@@ -68,4 +75,5 @@ public class FileReaderHandler {
 
         return callDataRecordPlusEntityList;
     }
+
 }

@@ -8,14 +8,19 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-/** Класс отвечает за запись CDR и CDR+ файла. Решил не отправлять ссылку на сохраненный файл, а просто сделать их статичными.
- * Файлы будут каждый раз перезаписываться (при каждой тарификации файл будет обновляться). **/
-public class FileWriterHandler {
+/**
+ * Класс отвечает за запись CDR и CDR+ файла. Изначально хотел перезаписывать файл,
+ * но решил при каждой тарификации создавать новый с индексом + 1
+ **/
+public class FileWriterHandler extends FileHandler {
 
-    /** Метод записывает CDR File из списка CallDataRecordEntity и возвращает true если успешно или false **/
-    public static boolean writeCDRFile(List<CallDataRecordEntity> callDataRecordEntityList) {
+    /**
+     * Метод записывает CDR File из списка CallDataRecordEntity и возвращает path если успешно или null
+     **/
+    public static String writeCdrFileAndReturnPath(List<CallDataRecordEntity> callDataRecordEntityList) {
         try {
-            File file = new File("\\src\\main\\resources\\cdr_file\\CDR.txt");
+            String path = CDR_FILE_PATH + getNextFileIndex(CDR_FILE_PATH) + ".txt";
+            File file = new File(path);
             FileWriter fileWriter = new FileWriter(file, false);
 
             for (CallDataRecordEntity entity : callDataRecordEntityList) {
@@ -30,17 +35,20 @@ public class FileWriterHandler {
                 );
             }
             fileWriter.close();
-            return true;
+            return path;
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 
-    /** Метод записывает CDR+ File из списка CallDataRecordPlusEntity и возвращает true если успешно или false **/
-    public static boolean writeCDRPlusFile(List<CallDataRecordPlusEntity> callDataRecordPlusEntityList) {
+    /**
+     * Метод записывает CDR+ File из списка CallDataRecordPlusEntity и возвращает path если успешно или null
+     **/
+    public static String writeCdrPlusFileAndReturnPath(List<CallDataRecordPlusEntity> callDataRecordPlusEntityList) {
         try {
-            File file = new File("\\src\\main\\resources\\cdr_file\\PlusCDR.txt");
+            String path = CDR_PLUS_FILE_PATH + getNextFileIndex(CDR_PLUS_FILE_PATH) + ".txt";
+            File file = new File(path);
             FileWriter fileWriter = new FileWriter(file, false);
 
             for (CallDataRecordPlusEntity entity : callDataRecordPlusEntityList) {
@@ -56,10 +64,10 @@ public class FileWriterHandler {
                 );
             }
             fileWriter.close();
-            return true;
+            return path;
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 

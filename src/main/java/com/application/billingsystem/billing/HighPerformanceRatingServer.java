@@ -1,9 +1,12 @@
-package com.application.billingsystem.main;
+package com.application.billingsystem.billing;
 
 
+import com.application.billingsystem.billing.BillingContract;
 import com.application.billingsystem.dto.SubscriberReportDto;
 import com.application.billingsystem.entity.*;
 import com.application.billingsystem.file_handler.FileReaderHandler;
+import com.application.billingsystem.main.DateMapper;
+import com.application.billingsystem.main.FloatCompare;
 import com.application.billingsystem.mapping.SubscriberReportMapper;
 import com.application.billingsystem.services.TariffService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,21 +31,21 @@ public class HighPerformanceRatingServer implements BillingContract.HRS {
     }
 
     @Override
-    public void run() {
-        sortingSubscriberCalls();
+    public void run(String filePath) {
+        sortingSubscriberCalls(filePath);
     }
 
     /**
      * Метод сортирует CDR+ по абонентам
      **/
-    private void sortingSubscriberCalls() {
+    private void sortingSubscriberCalls(String filePath) {
         /** Кэш тарифов, чтобы лишний раз не обращаться в БД, где ключ - индекс тарифа **/
         final Map<String, TariffEntity> tariffEntityHashMap = new HashMap<>();
         /** Список CDR+ сущностей, где ключ - номер телефона абонента **/
         final Map<String, DataListEntity<CallDataRecordPlusEntity>> cdrPlusHashMap = new HashMap<>();
         /** Читаем CDR+ и получаем информацию в списке **/
         final List<CallDataRecordPlusEntity> callDataRecordPlusEntityList =
-                FileReaderHandler.readCDRPlusFileAndReturnListEntity();
+                FileReaderHandler.readCDRPlusFileAndReturnListEntity(filePath);
 
         TariffEntity tariff;
 

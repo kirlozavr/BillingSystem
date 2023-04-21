@@ -1,4 +1,4 @@
-package com.application.billingsystem.main;
+package com.application.billingsystem.billing;
 
 import com.application.billingsystem.dto.SubscriberReportDto;
 import com.application.billingsystem.entity.CallDataRecordEntity;
@@ -9,7 +9,9 @@ import com.application.billingsystem.file_handler.FileWriterHandler;
 import com.application.billingsystem.mapping.SubscriberReportMapper;
 import com.application.billingsystem.services.SubscriberReportService;
 import com.application.billingsystem.services.SubscriberService;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -27,7 +29,7 @@ public class BillingRealTimeService implements BillingContract.BRT<SubscriberRep
     public BillingRealTimeService(
             SubscriberService subscriberService,
             SubscriberReportService subscriberReportService,
-            BillingContract.HRS contractHrs
+            @Lazy BillingContract.HRS contractHrs
     ) {
         this.subscriberService = subscriberService;
         this.subscriberReportService = subscriberReportService;
@@ -35,11 +37,11 @@ public class BillingRealTimeService implements BillingContract.BRT<SubscriberRep
     }
 
     @Override
-    public void run(){
-        boolean isGenerateFile = generateNewCDRPlusFile();
+    public void run(@NotNull String filePath){
+        String path = generateNewCdrPlusFileFromCdrFile(filePath);
 
-        if (isGenerateFile){
-            contractHrs.run();
+        if (path != null){
+            contractHrs.run(path);
         }
     }
 
@@ -48,29 +50,33 @@ public class BillingRealTimeService implements BillingContract.BRT<SubscriberRep
     public void putAndUpdateDataToDatabase(SubscriberReportDto dto) {
         subscriberReportService
                 .createSubscriberReport(subscriberReportMapper.getDtoToEntity(dto));
+        updateBalance(dto);
+    }
+
+    private void updateBalance(SubscriberReportDto dto){
         SubscriberEntity subscriberEntity = subscriberService.getSubscriber(dto.getNumberPhone());
         subscriberEntity.setBalance(subscriberEntity.getBalance() - dto.getTotalCost());
         subscriberService.updateSubscriber(subscriberEntity);
     }
 
     /**
-     * Метод генерирует CDR+ файл и возвращает true, если операция успешна, иначе false
+     * Метод генерирует CDR+ файл и возвращает path, если операция успешна, иначе null
      **/
-    private boolean generateNewCDRPlusFile() {
-        final List<CallDataRecordPlusEntity> callDataRecordPlusFinal = getListCallsAuthorization();
-        boolean isWrite = false;
+    private String generateNewCdrPlusFileFromCdrFile(String cdrFilePath) {
+        final List<CallDataRecordPlusEntity> callDataRecordPlusFinal = getListCallsAuthorizationFromCdrFile(cdrFilePath);
+        String path = null;
         if (callDataRecordPlusFinal != null) {
-            isWrite = FileWriterHandler.writeCDRPlusFile(callDataRecordPlusFinal);
+            path = FileWriterHandler.writeCdrPlusFileAndReturnPath(callDataRecordPlusFinal);
         }
-        return isWrite;
+        return path;
     }
 
     /**
      * Метод получения получения списка CallDataRecordPlusEntity
      **/
-    private List<CallDataRecordPlusEntity> getListCallsAuthorization() {
+    private List<CallDataRecordPlusEntity> getListCallsAuthorizationFromCdrFile(String cdrFilePath) {
         final List<CallDataRecordEntity> callDataRecordEntityList =
-                FileReaderHandler.readCDRFileAndReturnListEntity(); /** Список всех звонков из файла CDR **/
+                FileReaderHandler.readCDRFileAndReturnListEntity(cdrFilePath); /** Список всех звонков из файла CDR **/
 
         if (!callDataRecordEntityList.isEmpty()) {
             /** Набор уникальных номеров, которые осуществляли разговор
