@@ -69,17 +69,17 @@ public class TariffController {
                 !FloatCompare.isEquals(createDto.getMinuteLimit(), tariffEntity.getMinuteLimit())){
             tariffEntity.setMinuteLimit(createDto.getMinuteLimit());
         }
-        if(createDto.getOutBet() > 0.0f &&
-                !FloatCompare.isEquals(createDto.getOutBet(), tariffEntity.getOutBet())){
-            tariffEntity.setOutBet(createDto.getOutBet());
+        if(createDto.getOutBetBeforeLimit() > 0.0f &&
+                !FloatCompare.isEquals(createDto.getOutBetBeforeLimit(), tariffEntity.getOutBetBeforeLimit())){
+            tariffEntity.setOutBetBeforeLimit(createDto.getOutBetBeforeLimit());
         }
         if(createDto.getOutBetAfterLimit() > 0.0f &&
                 !FloatCompare.isEquals(createDto.getOutBetAfterLimit(), tariffEntity.getOutBetAfterLimit())){
             tariffEntity.setOutBetAfterLimit(createDto.getOutBetAfterLimit());
         }
-        if(createDto.getInBet() > 0.0f &&
-                !FloatCompare.isEquals(createDto.getInBet(), tariffEntity.getInBet())){
-            tariffEntity.setInBet(createDto.getInBet());
+        if(createDto.getInBetBeforeLimit() > 0.0f &&
+                !FloatCompare.isEquals(createDto.getInBetBeforeLimit(), tariffEntity.getInBetBeforeLimit())){
+            tariffEntity.setInBetBeforeLimit(createDto.getInBetBeforeLimit());
         }
         if(createDto.getSubscriberPayment() > 0.0f &&
                 !FloatCompare.isEquals(createDto.getSubscriberPayment(), tariffEntity.getSubscriberPayment())){

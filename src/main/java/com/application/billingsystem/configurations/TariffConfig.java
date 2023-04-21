@@ -18,11 +18,12 @@ public class TariffConfig {
             tariffRepository.save(new TariffEntity(
                     "06",
                     "Безлимит 300",
-                    300.0f,
+                    300,
                     0.0f,
                     1.0f,
-                    1.5f,
-                    100.0f,
+                    0.0f,
+                    1.0f,
+                    100,
                     "rubles"
             ));
             tariffRepository.save(new TariffEntity(
@@ -31,18 +32,20 @@ public class TariffConfig {
                     0,
                     0.0f,
                     1.5f,
-                    1.5f,
                     0.0f,
+                    1.5f,
+                    0,
                     "rubles"
             ));
             tariffRepository.save(new TariffEntity(
                     "11",
                     "Обычный",
-                    100.0f,
+                    100,
                     0.5f,
                     1.5f,
                     0.0f,
                     0.0f,
+                    0,
                     "rubles"
             ));
         };

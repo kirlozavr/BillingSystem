@@ -9,10 +9,11 @@ public class TariffCreateDto {
 
     private String tariffIndex; // id тарифа
     private String nameTariff; //Название тарифа
-    private float minuteLimit; // Лимит минут
-    private float outBet; // Ставка на исходящие звонки
+    private int minuteLimit; // Лимит минут
+    private float outBetBeforeLimit; // Ставка на исходящие звонки до превышения лимита
     private float outBetAfterLimit; // Ставка на исходящие звонки после превышения лимита
-    private float inBet; // Ставка на входящие звонки
-    private float subscriberPayment; // Абонентская плата
+    private float inBetBeforeLimit; // Ставка на входящие звонки до превышения лимита
+    private float inBetAfterLimit; // Ставка на входящие звонки после превышения лимита
+    private int subscriberPayment; // Абонентская плата
     private String monetaryUnit;
 }

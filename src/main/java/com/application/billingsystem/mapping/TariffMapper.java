@@ -14,9 +14,10 @@ public class TariffMapper implements Mapper<TariffEntity, TariffDto> {
                 entity.getTariffIndex(),
                 entity.getNameTariff(),
                 entity.getMinuteLimit(),
-                entity.getOutBet(),
+                entity.getOutBetBeforeLimit(),
                 entity.getOutBetAfterLimit(),
-                entity.getInBet(),
+                entity.getInBetBeforeLimit(),
+                entity.getInBetAfterLimit(),
                 entity.getSubscriberPayment()
         );
     }
@@ -27,9 +28,10 @@ public class TariffMapper implements Mapper<TariffEntity, TariffDto> {
                 dto.getTariffIndex(),
                 dto.getNameTariff(),
                 dto.getMinuteLimit(),
-                dto.getOutBet(),
+                dto.getOutBetBeforeLimit(),
                 dto.getOutBetAfterLimit(),
-                dto.getInBet(),
+                dto.getInBetBeforeLimit(),
+                dto.getInBetAfterLimit(),
                 dto.getSubscriberPayment(),
                 null
         );
@@ -40,9 +42,10 @@ public class TariffMapper implements Mapper<TariffEntity, TariffDto> {
                 createDto.getTariffIndex(),
                 createDto.getNameTariff(),
                 createDto.getMinuteLimit(),
-                createDto.getOutBet(),
+                createDto.getOutBetBeforeLimit(),
                 createDto.getOutBetAfterLimit(),
-                createDto.getInBet(),
+                createDto.getInBetBeforeLimit(),
+                createDto.getInBetAfterLimit(),
                 createDto.getSubscriberPayment(),
                 createDto.getMonetaryUnit()
         );
