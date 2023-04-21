@@ -10,8 +10,8 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 @Entity
-@Table(name = "pay_transactions")
-public class PayEntity {
+@Table(name = "payment")
+public class PaymentEntity {
 
     @Id
     @SequenceGenerator(
@@ -27,7 +27,7 @@ public class PayEntity {
     private String numberPhone;
     private float money;
 
-    public PayEntity(String numberPhone, float money) {
+    public PaymentEntity(String numberPhone, float money) {
         this.numberPhone = numberPhone;
         this.money = money;
     }
@@ -35,8 +35,8 @@ public class PayEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PayEntity payEntity)) return false;
-        return id == payEntity.id && Float.compare(payEntity.money, money) == 0 && numberPhone.equals(payEntity.numberPhone);
+        if (!(o instanceof PaymentEntity paymentEntity)) return false;
+        return id == paymentEntity.id && Float.compare(paymentEntity.money, money) == 0 && numberPhone.equals(paymentEntity.numberPhone);
     }
 
     @Override

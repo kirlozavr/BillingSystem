@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.StreamSupport;
 
 @RestController
-@RequestMapping("/report")
+@RequestMapping("*/report")
 public class SubscriberReportController {
 
     private final SubscriberReportService service;

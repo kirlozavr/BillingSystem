@@ -12,9 +12,8 @@ import java.util.List;
 import java.util.stream.StreamSupport;
 
 @RestController
-@RequestMapping("/tariff")
+@RequestMapping("*/tariff")
 public class TariffController {
-
     private final TariffService service;
     private final TariffMapper mapper = new TariffMapper();
 

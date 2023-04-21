@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.StreamSupport;
 
 @RestController
-@RequestMapping("/subscriber")
+@RequestMapping("*/subscriber")
 public class SubscriberController {
 
     private final SubscriberService service;
@@ -42,7 +42,7 @@ public class SubscriberController {
                 .getEntityToDto(service.getSubscriber(numberPhone));
     }
 
-    @GetMapping(path = "/number_phone={numberPhone}")
+    @GetMapping(path = "/={numberPhone}")
     public SubscriberDto findByNumberPhoneAndPositiveBalance(@PathVariable("numberPhone") String numberPhone){
         return mapper
                 .getEntityToDto(service.getSubscriberByNumberPhoneAndPositiveBalance(numberPhone));

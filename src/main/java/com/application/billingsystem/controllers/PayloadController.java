@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.StreamSupport;
 
 @RestController
-@RequestMapping("/payload")
+@RequestMapping("*/payload")
 public class PayloadController {
 
     private final PayloadService service;
