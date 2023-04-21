@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.StreamSupport;
 
 @RestController
-@RequestMapping("/changeSubscriberTariffController")
+@RequestMapping("*/changeTariff")
 public class ChangeSubscriberTariffController {
 
     private final ChangeSubscriberTariffService service;
@@ -43,7 +43,7 @@ public class ChangeSubscriberTariffController {
     }
 
     @PutMapping(path = "/{changeSubscriberTariffId}")
-    public void putPayload(
+    public void putChangeSubscriberTariff(
             @PathVariable("changeSubscriberTariffId") Long changeSubscriberTariffId,
             @RequestBody ChangeSubscriberTariffCreateDto createDto
     ) {
