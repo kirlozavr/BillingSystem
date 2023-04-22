@@ -13,7 +13,7 @@ public class TariffConfig {
 
     @Bean
     @Transactional
-    public CommandLineRunner commandLine(TariffRepository tariffRepository){
+    public CommandLineRunner commandLineTariff(TariffRepository tariffRepository){
         return args -> {
             tariffRepository.save(new TariffEntity(
                     "06",
