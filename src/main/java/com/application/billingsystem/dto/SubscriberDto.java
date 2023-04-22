@@ -7,5 +7,5 @@ public class SubscriberDto {
     private final long id;
     private final String numberPhone;
     private final String tariffIndex;
-    private final float balance;
+    private final long balance;
 }

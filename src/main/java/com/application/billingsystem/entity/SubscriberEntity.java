@@ -28,9 +28,9 @@ public class SubscriberEntity {
     private long id;
     private String numberPhone;
     private String tariffIndex;
-    private float balance;
+    private long balance;
 
-    public SubscriberEntity(String numberPhone, String tariffIndex, float balance) {
+    public SubscriberEntity(String numberPhone, String tariffIndex, long balance) {
         this.numberPhone = numberPhone;
         this.tariffIndex = tariffIndex;
         this.balance = balance;

@@ -27,24 +27,26 @@ public class SubscriberService {
     }
 
     public SubscriberEntity getSubscriber(String numberPhone) {
-        return repository.findSubscriberEntityByNumberPhone(numberPhone)
+        return repository.findFirstByNumberPhone(numberPhone)
                 .orElseThrow(() -> new SubscriberNotFoundException("Subscriber not found"));
     }
 
     public SubscriberEntity getSubscriberByNumberPhoneAndPositiveBalance(String numberPhone) {
         return repository
-                .findSubscriberEntityByNumberPhoneAndBalanceGreaterThan(numberPhone, 0)
+                .findFirstByNumberPhoneAndBalanceGreaterThan(numberPhone, 0)
                 .orElse(null);
     }
 
     @Transactional
     public void createSubscriber(SubscriberEntity subscriber) {
         var subscriberOptional = repository
-                .findSubscriberEntityByNumberPhone(subscriber.getNumberPhone());
+                .findFirstByNumberPhone(subscriber.getNumberPhone());
         if (subscriberOptional.isPresent()) {
-            throw new SubscriberNotFoundException("Subscriber is exists");
+            //throw new SubscriberNotFoundException("Subscriber is exists");
+
+        } else {
+            repository.save(subscriber);
         }
-        repository.save(subscriber);
     }
 
     @Transactional

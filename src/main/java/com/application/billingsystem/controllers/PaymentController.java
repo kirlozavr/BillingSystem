@@ -57,15 +57,14 @@ public class PaymentController {
             @RequestBody PaymentCreateDto createDto
     ) {
         PaymentEntity paymentEntity = service.getPayment(paymentId);
-        float totalMoney = createDto.getMoney();
+        long totalMoney = createDto.getMoney();
 
         if (createDto.getNumberPhone() != null &&
                 createDto.getNumberPhone().length() > 0 &&
                 !createDto.getNumberPhone().equals(paymentEntity.getNumberPhone())) {
             paymentEntity.setNumberPhone(createDto.getNumberPhone());
         }
-        if (createDto.getMoney() > 0.0f &&
-                !FloatCompare.isEquals(createDto.getMoney(), paymentEntity.getMoney())) {
+        if (createDto.getMoney() != paymentEntity.getMoney()) {
             totalMoney -= paymentEntity.getMoney();
             paymentEntity.setMoney(createDto.getMoney());
         }
@@ -75,11 +74,11 @@ public class PaymentController {
     }
 
     @DeleteMapping("/{paymentId}")
-    public void deletePayment(@PathVariable("paymentId") Long payId) {
-        service.deletePayment(payId);
+    public void deletePayment(@PathVariable("paymentId") Long paymentId) {
+        service.deletePayment(paymentId);
     }
 
-    private void updateSubscriberBalance(PaymentCreateDto createDto, float totalMoney) {
+    private void updateSubscriberBalance(PaymentCreateDto createDto, long totalMoney) {
         SubscriberEntity subscriberEntity = subscriberService.getSubscriber(createDto.getNumberPhone());
         subscriberEntity.setBalance(subscriberEntity.getBalance() + totalMoney);
         subscriberService.updateSubscriber(subscriberEntity);

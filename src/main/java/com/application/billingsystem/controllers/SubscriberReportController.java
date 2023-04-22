@@ -7,12 +7,14 @@ import com.application.billingsystem.main.FloatCompare;
 import com.application.billingsystem.mapping.SubscriberReportMapper;
 import com.application.billingsystem.services.SubscriberReportService;
 import com.application.billingsystem.services.SubscriberService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.StreamSupport;
 
+@Slf4j
 @RestController
 @RequestMapping("*/report")
 public class SubscriberReportController {
@@ -105,7 +107,7 @@ public class SubscriberReportController {
     private void updateSubscriberBalance(SubscriberReportDto subscriberReportDto, float totalCost) {
         SubscriberEntity subscriberEntity = subscriberService
                 .getSubscriber(subscriberReportDto.getNumberPhone());
-        subscriberEntity.setBalance(subscriberEntity.getBalance() - totalCost);
+        subscriberEntity.setBalance((long) (subscriberEntity.getBalance() - Math.ceil(totalCost)));
         subscriberService.updateSubscriber(subscriberEntity);
     }
 

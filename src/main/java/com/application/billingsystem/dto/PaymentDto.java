@@ -6,9 +6,9 @@ import lombok.Data;
 public class PaymentDto {
     private final long id;
     private final String numberPhone;
-    private final float money;
+    private final long money;
 
-    public PaymentDto(long id, String numberPhone, float money) {
+    public PaymentDto(long id, String numberPhone, long money) {
         this.id = id;
         this.numberPhone = numberPhone;
         this.money = money;

@@ -27,14 +27,14 @@ public class TariffService {
     }
 
     public TariffEntity getTariff(String tariffIndex) {
-        return repository.findTariffEntityByTariffIndex(tariffIndex)
+        return repository.findFirstByTariffIndex(tariffIndex)
                 .orElseThrow(() -> new TariffNotFoundException("Tariff not found"));
     }
 
     @Transactional
     public void createTariff(TariffEntity tariff) {
         var tariffOptional = repository
-                .findTariffEntityByTariffIndex(tariff.getTariffIndex());
+                .findFirstByTariffIndex(tariff.getTariffIndex());
         if (tariffOptional.isPresent()) {
             throw new TariffNotFoundException("Tariff is exists");
         }

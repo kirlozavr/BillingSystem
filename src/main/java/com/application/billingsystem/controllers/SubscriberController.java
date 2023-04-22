@@ -71,8 +71,7 @@ public class SubscriberController {
                 !createDto.getTariffIndex().equals(subscriberEntity.getTariffIndex())) {
             subscriberEntity.setTariffIndex(createDto.getTariffIndex());
         }
-        if (createDto.getBalance() > 0.0f &&
-                !FloatCompare.isEquals(createDto.getBalance(), subscriberEntity.getBalance())) {
+        if (createDto.getBalance() != subscriberEntity.getBalance()) {
             subscriberEntity.setBalance(createDto.getBalance());
         }
 

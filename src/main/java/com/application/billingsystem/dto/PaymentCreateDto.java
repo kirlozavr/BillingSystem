@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class PaymentCreateDto {
     private String numberPhone;
-    private float money;
+    private long money;
 }

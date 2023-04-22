@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface SubscriberReportRepository
         extends JpaRepository<SubscriberReportEntity, Long> {
 
-    Optional<SubscriberReportEntity> findByNumberPhone(String numberPhone);
+    Optional<SubscriberReportEntity> findFirstByNumberPhone(String numberPhone);
 }

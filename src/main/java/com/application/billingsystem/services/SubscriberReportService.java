@@ -29,7 +29,7 @@ public class SubscriberReportService {
     }
 
     public SubscriberReportEntity getSubscriberReport(String numberPhone) {
-        return repository.findByNumberPhone(numberPhone)
+        return repository.findFirstByNumberPhone(numberPhone)
                 .orElseThrow(() -> new SubscriberReportNotFoundException("SubscriberReport not found"));
     }
 

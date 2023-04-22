@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface TariffRepository
         extends CrudRepository<TariffEntity, Long> {
-    Optional<TariffEntity> findTariffEntityByTariffIndex(String tariffIndex);
+    Optional<TariffEntity> findFirstByTariffIndex(String tariffIndex);
 }

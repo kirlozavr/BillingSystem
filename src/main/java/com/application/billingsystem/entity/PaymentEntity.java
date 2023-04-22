@@ -29,9 +29,9 @@ public class PaymentEntity {
     )
     private long id;
     private String numberPhone;
-    private float money;
+    private long money;
 
-    public PaymentEntity(String numberPhone, float money) {
+    public PaymentEntity(String numberPhone, long money) {
         this.numberPhone = numberPhone;
         this.money = money;
     }

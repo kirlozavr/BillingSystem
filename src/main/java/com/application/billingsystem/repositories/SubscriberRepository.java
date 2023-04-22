@@ -10,6 +10,6 @@ import java.util.Optional;
 public interface SubscriberRepository
         extends CrudRepository<SubscriberEntity, Long> {
 
-    Optional<SubscriberEntity> findSubscriberEntityByNumberPhone(String numberPhone);
-    Optional<SubscriberEntity> findSubscriberEntityByNumberPhoneAndBalanceGreaterThan(String numberPhone, float balance);
+    Optional<SubscriberEntity> findFirstByNumberPhone(String numberPhone);
+    Optional<SubscriberEntity> findFirstByNumberPhoneAndBalanceGreaterThan(String numberPhone, long balance);
 }
