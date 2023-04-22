@@ -13,6 +13,10 @@ import java.util.Objects;
 @Table(name = "payload")
 public class PayloadEntity {
 
+    /**
+     * Сущность звонка
+     **/
+
     @Id
     @SequenceGenerator(
             name = "payload_id_seq",

@@ -17,38 +17,38 @@ public class SubscriberService {
         this.repository = repository;
     }
 
-    public Iterable<SubscriberEntity> getAllSubscribers(){
+    public Iterable<SubscriberEntity> getAllSubscribers() {
         return repository.findAll();
     }
 
-    public SubscriberEntity getSubscriber(Long subscriberId){
+    public SubscriberEntity getSubscriber(Long subscriberId) {
         return repository.findById(subscriberId)
                 .orElseThrow(() -> new SubscriberNotFoundException("Subscriber not found"));
     }
 
-    public SubscriberEntity getSubscriber(String numberPhone){
+    public SubscriberEntity getSubscriber(String numberPhone) {
         return repository.findSubscriberEntityByNumberPhone(numberPhone)
                 .orElseThrow(() -> new SubscriberNotFoundException("Subscriber not found"));
     }
 
-    public SubscriberEntity getSubscriberByNumberPhoneAndPositiveBalance(String numberPhone){
+    public SubscriberEntity getSubscriberByNumberPhoneAndPositiveBalance(String numberPhone) {
         return repository
                 .findSubscriberEntityByNumberPhoneAndBalanceGreaterThan(numberPhone, 0)
                 .orElse(null);
     }
 
     @Transactional
-    public void createSubscriber(SubscriberEntity subscriber){
+    public void createSubscriber(SubscriberEntity subscriber) {
         var subscriberOptional = repository
                 .findSubscriberEntityByNumberPhone(subscriber.getNumberPhone());
-        if(subscriberOptional.isPresent()){
+        if (subscriberOptional.isPresent()) {
             throw new SubscriberNotFoundException("Subscriber is exists");
         }
         repository.save(subscriber);
     }
 
     @Transactional
-    public void updateSubscriber(SubscriberEntity subscriber){
+    public void updateSubscriber(SubscriberEntity subscriber) {
         if (!repository.existsById(subscriber.getId())) {
             throw new SubscriberNotFoundException("Subscriber not found");
         }
@@ -56,9 +56,9 @@ public class SubscriberService {
     }
 
     @Transactional
-    public void deleteSubscriber(Long subscriberId){
+    public void deleteSubscriber(Long subscriberId) {
         var existsSubscriber = repository.existsById(subscriberId);
-        if(!existsSubscriber){
+        if (!existsSubscriber) {
             throw new SubscriberNotFoundException("Subscriber is not exists");
         }
         repository.deleteById(subscriberId);

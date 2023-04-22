@@ -13,6 +13,10 @@ import java.util.Objects;
 @Table(name = "change_subscriber_tariff")
 public class ChangeSubscriberTariffEntity {
 
+    /**
+     * Сущность изменения тарифа
+     **/
+
     @Id
     @SequenceGenerator(
             name = "change_subscriber_tariff_id_seq",

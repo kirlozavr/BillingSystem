@@ -50,13 +50,6 @@ public class BillingRealTimeService implements BillingContract.BRT<SubscriberRep
     public void putAndUpdateDataToDatabase(SubscriberReportDto dto) {
         subscriberReportService
                 .createSubscriberReport(subscriberReportMapper.getDtoToEntity(dto));
-        updateBalance(dto);
-    }
-
-    private void updateBalance(SubscriberReportDto dto){
-        SubscriberEntity subscriberEntity = subscriberService.getSubscriber(dto.getNumberPhone());
-        subscriberEntity.setBalance(subscriberEntity.getBalance() - dto.getTotalCost());
-        subscriberService.updateSubscriber(subscriberEntity);
     }
 
     /**

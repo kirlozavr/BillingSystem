@@ -10,6 +10,10 @@ import lombok.*;
 @Table(name = "tariff")
 public class TariffEntity {
 
+    /**
+     * Сущность тарифа
+     **/
+
     @Id
     @SequenceGenerator(
             name = "tariff_id_seq",
@@ -31,8 +35,7 @@ public class TariffEntity {
     private int subscriberPayment; // Абонентская плата
     private String monetaryUnit;
 
-    public TariffEntity() {
-    }
+    public TariffEntity() {}
 
     public TariffEntity(
             String tariffIndex,

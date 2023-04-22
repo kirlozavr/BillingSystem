@@ -13,6 +13,10 @@ import java.util.Objects;
 @Table(name = "payment")
 public class PaymentEntity {
 
+    /**
+     * Сущность платежа на пополнение счета
+     **/
+
     @Id
     @SequenceGenerator(
             name = "payload_id_seq",

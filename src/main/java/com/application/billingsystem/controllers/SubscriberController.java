@@ -23,7 +23,7 @@ public class SubscriberController {
     }
 
     @GetMapping("/")
-    public List<SubscriberDto> getAllSubscribers(){
+    public List<SubscriberDto> getAllSubscribers() {
         return StreamSupport
                 .stream(service.getAllSubscribers().spliterator(), false)
                 .map(mapper::getEntityToDto)
@@ -31,25 +31,25 @@ public class SubscriberController {
     }
 
     @GetMapping(path = "/id={subscriberId}")
-    public SubscriberDto findById(@PathVariable("subscriberId") Long subscriberId){
+    public SubscriberDto findById(@PathVariable("subscriberId") Long subscriberId) {
         return mapper
                 .getEntityToDto(service.getSubscriber(subscriberId));
     }
 
     @GetMapping(path = "/number={numberPhone}")
-    public SubscriberDto findByNumberPhone(@PathVariable("numberPhone") String numberPhone){
+    public SubscriberDto findByNumberPhone(@PathVariable("numberPhone") String numberPhone) {
         return mapper
                 .getEntityToDto(service.getSubscriber(numberPhone));
     }
 
     @GetMapping(path = "/={numberPhone}")
-    public SubscriberDto findByNumberPhoneAndPositiveBalance(@PathVariable("numberPhone") String numberPhone){
+    public SubscriberDto findByNumberPhoneAndPositiveBalance(@PathVariable("numberPhone") String numberPhone) {
         return mapper
                 .getEntityToDto(service.getSubscriberByNumberPhoneAndPositiveBalance(numberPhone));
     }
 
     @PostMapping
-    public void postSubscriber(@RequestBody SubscriberCreateDto createDto){
+    public void postSubscriber(@RequestBody SubscriberCreateDto createDto) {
         service.createSubscriber(mapper.getCreateDtoToEntity(createDto));
     }
 
@@ -57,22 +57,22 @@ public class SubscriberController {
     public void putSubscriber(
             @PathVariable("subscriberId") Long subscriberId,
             @RequestBody SubscriberCreateDto createDto
-    ){
+    ) {
         SubscriberEntity subscriberEntity = service.getSubscriber(subscriberId);
 
-        if(createDto.getNumberPhone() != null &&
-                createDto.getNumberPhone().length() >0 &&
+        if (createDto.getNumberPhone() != null &&
+                createDto.getNumberPhone().length() > 0 &&
                 !createDto.getNumberPhone().equals(subscriberEntity.getNumberPhone()) &&
-                service.getSubscriber(createDto.getNumberPhone()) == null){
+                service.getSubscriber(createDto.getNumberPhone()) == null) {
             subscriberEntity.setNumberPhone(createDto.getNumberPhone());
         }
-        if(createDto.getTariffIndex() != null &&
-                createDto.getTariffIndex().length() >0 &&
-                !createDto.getTariffIndex().equals(subscriberEntity.getTariffIndex())){
+        if (createDto.getTariffIndex() != null &&
+                createDto.getTariffIndex().length() > 0 &&
+                !createDto.getTariffIndex().equals(subscriberEntity.getTariffIndex())) {
             subscriberEntity.setTariffIndex(createDto.getTariffIndex());
         }
-        if(createDto.getBalance() > 0.0f &&
-                !FloatCompare.isEquals(createDto.getBalance(), subscriberEntity.getBalance())){
+        if (createDto.getBalance() > 0.0f &&
+                !FloatCompare.isEquals(createDto.getBalance(), subscriberEntity.getBalance())) {
             subscriberEntity.setBalance(createDto.getBalance());
         }
 
@@ -80,7 +80,7 @@ public class SubscriberController {
     }
 
     @DeleteMapping(path = "/{subscriberId}")
-    public void deleteSubscriber(@PathVariable("subscriberId") Long subscriberId){
+    public void deleteSubscriber(@PathVariable("subscriberId") Long subscriberId) {
         service.deleteSubscriber(subscriberId);
     }
 }

@@ -41,7 +41,7 @@ public class PaymentService {
 
     @Transactional
     public void deletePayment(long payId) {
-        if(!repository.existsById(payId)){
+        if (!repository.existsById(payId)) {
             throw new PaymentNotFoundException("Pay is not exists");
         }
         repository.deleteById(payId);

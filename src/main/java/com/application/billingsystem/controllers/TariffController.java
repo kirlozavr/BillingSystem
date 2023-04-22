@@ -22,7 +22,7 @@ public class TariffController {
     }
 
     @GetMapping("/")
-    public List<TariffDto> getAllTariff(){
+    public List<TariffDto> getAllTariff() {
         return StreamSupport
                 .stream(service.gelAllTariffs().spliterator(), false)
                 .map(mapper::getEntityToDto)
@@ -30,19 +30,19 @@ public class TariffController {
     }
 
     @GetMapping(path = "/id={tariffId}")
-    public TariffDto findById(@PathVariable("tariffId") Long tariffId){
+    public TariffDto findById(@PathVariable("tariffId") Long tariffId) {
         return mapper
                 .getEntityToDto(service.getTariff(tariffId));
     }
 
     @GetMapping(path = "/tariff_index={tariffIndex}")
-    public TariffDto findByIndex(@PathVariable("tariffIndex") String tariffIndex){
+    public TariffDto findByIndex(@PathVariable("tariffIndex") String tariffIndex) {
         return mapper
                 .getEntityToDto(service.getTariff(tariffIndex));
     }
 
     @PostMapping
-    public void postTariff(@RequestBody TariffCreateDto createDto){
+    public void postTariff(@RequestBody TariffCreateDto createDto) {
         service.createTariff(mapper.getCreateDtoToEntity(createDto));
     }
 
@@ -50,43 +50,43 @@ public class TariffController {
     public void putTariff(
             @PathVariable("tariffId") Long tariffId,
             @RequestBody TariffCreateDto createDto
-    ){
+    ) {
         TariffEntity tariffEntity = service.getTariff(tariffId);
 
-        if(createDto.getTariffIndex() != null &&
-        createDto.getTariffIndex().length() >0 &&
-        !createDto.getTariffIndex().equals(tariffEntity.getTariffIndex()) &&
-        service.getTariff(createDto.getTariffIndex()) == null){
+        if (createDto.getTariffIndex() != null &&
+                createDto.getTariffIndex().length() > 0 &&
+                !createDto.getTariffIndex().equals(tariffEntity.getTariffIndex()) &&
+                service.getTariff(createDto.getTariffIndex()) == null) {
             tariffEntity.setTariffIndex(createDto.getTariffIndex());
         }
-        if(createDto.getNameTariff() != null &&
-                createDto.getNameTariff().length() >0 &&
-                !createDto.getNameTariff().equals(tariffEntity.getNameTariff())){
+        if (createDto.getNameTariff() != null &&
+                createDto.getNameTariff().length() > 0 &&
+                !createDto.getNameTariff().equals(tariffEntity.getNameTariff())) {
             tariffEntity.setNameTariff(createDto.getNameTariff());
         }
-        if(createDto.getMinuteLimit() > 0.0f &&
-                !FloatCompare.isEquals(createDto.getMinuteLimit(), tariffEntity.getMinuteLimit())){
+        if (createDto.getMinuteLimit() > 0.0f &&
+                !FloatCompare.isEquals(createDto.getMinuteLimit(), tariffEntity.getMinuteLimit())) {
             tariffEntity.setMinuteLimit(createDto.getMinuteLimit());
         }
-        if(createDto.getOutBetBeforeLimit() > 0.0f &&
-                !FloatCompare.isEquals(createDto.getOutBetBeforeLimit(), tariffEntity.getOutBetBeforeLimit())){
+        if (createDto.getOutBetBeforeLimit() > 0.0f &&
+                !FloatCompare.isEquals(createDto.getOutBetBeforeLimit(), tariffEntity.getOutBetBeforeLimit())) {
             tariffEntity.setOutBetBeforeLimit(createDto.getOutBetBeforeLimit());
         }
-        if(createDto.getOutBetAfterLimit() > 0.0f &&
-                !FloatCompare.isEquals(createDto.getOutBetAfterLimit(), tariffEntity.getOutBetAfterLimit())){
+        if (createDto.getOutBetAfterLimit() > 0.0f &&
+                !FloatCompare.isEquals(createDto.getOutBetAfterLimit(), tariffEntity.getOutBetAfterLimit())) {
             tariffEntity.setOutBetAfterLimit(createDto.getOutBetAfterLimit());
         }
-        if(createDto.getInBetBeforeLimit() > 0.0f &&
-                !FloatCompare.isEquals(createDto.getInBetBeforeLimit(), tariffEntity.getInBetBeforeLimit())){
+        if (createDto.getInBetBeforeLimit() > 0.0f &&
+                !FloatCompare.isEquals(createDto.getInBetBeforeLimit(), tariffEntity.getInBetBeforeLimit())) {
             tariffEntity.setInBetBeforeLimit(createDto.getInBetBeforeLimit());
         }
-        if(createDto.getSubscriberPayment() > 0.0f &&
-                !FloatCompare.isEquals(createDto.getSubscriberPayment(), tariffEntity.getSubscriberPayment())){
+        if (createDto.getSubscriberPayment() > 0.0f &&
+                !FloatCompare.isEquals(createDto.getSubscriberPayment(), tariffEntity.getSubscriberPayment())) {
             tariffEntity.setSubscriberPayment(createDto.getSubscriberPayment());
         }
-        if(createDto.getMonetaryUnit() != null &&
-                createDto.getMonetaryUnit().length() >0 &&
-                !createDto.getMonetaryUnit().equals(tariffEntity.getMonetaryUnit())){
+        if (createDto.getMonetaryUnit() != null &&
+                createDto.getMonetaryUnit().length() > 0 &&
+                !createDto.getMonetaryUnit().equals(tariffEntity.getMonetaryUnit())) {
             tariffEntity.setMonetaryUnit(createDto.getMonetaryUnit());
         }
 
@@ -94,7 +94,7 @@ public class TariffController {
     }
 
     @DeleteMapping(path = "/{tariffId}")
-    public void deleteTariff(@PathVariable("tariffId") Long tariffId){
+    public void deleteTariff(@PathVariable("tariffId") Long tariffId) {
         service.deleteTariff(tariffId);
     }
 }

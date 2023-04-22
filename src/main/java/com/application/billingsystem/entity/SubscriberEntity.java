@@ -11,6 +11,10 @@ import lombok.*;
 @Table(name = "subscriber")
 public class SubscriberEntity {
 
+    /**
+     * Сущность абонента
+     **/
+
     @Id
     @SequenceGenerator(
             name = "subscriber_id_seq",

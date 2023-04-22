@@ -17,42 +17,42 @@ public class TariffService {
         this.repository = repository;
     }
 
-    public Iterable<TariffEntity> gelAllTariffs(){
+    public Iterable<TariffEntity> gelAllTariffs() {
         return repository.findAll();
     }
 
-    public TariffEntity getTariff(Long tariffId){
+    public TariffEntity getTariff(Long tariffId) {
         return repository.findById(tariffId)
                 .orElseThrow(() -> new TariffNotFoundException("Tariff not found"));
     }
 
-    public TariffEntity getTariff(String tariffIndex){
+    public TariffEntity getTariff(String tariffIndex) {
         return repository.findTariffEntityByTariffIndex(tariffIndex)
                 .orElseThrow(() -> new TariffNotFoundException("Tariff not found"));
     }
 
     @Transactional
-    public void createTariff(TariffEntity tariff){
+    public void createTariff(TariffEntity tariff) {
         var tariffOptional = repository
                 .findTariffEntityByTariffIndex(tariff.getTariffIndex());
-        if (tariffOptional.isPresent()){
+        if (tariffOptional.isPresent()) {
             throw new TariffNotFoundException("Tariff is exists");
         }
         repository.save(tariff);
     }
 
     @Transactional
-    public void updateTariff(TariffEntity tariff){
-        if(!repository.existsById(tariff.getId())){
+    public void updateTariff(TariffEntity tariff) {
+        if (!repository.existsById(tariff.getId())) {
             throw new TariffNotFoundException("Tariff not found");
         }
         repository.save(tariff);
     }
 
     @Transactional
-    public void deleteTariff(Long tariffId){
+    public void deleteTariff(Long tariffId) {
         var existsTariff = repository.existsById(tariffId);
-        if(!existsTariff){
+        if (!existsTariff) {
             throw new TariffNotFoundException("Tariff is not exists");
         }
         repository.deleteById(tariffId);

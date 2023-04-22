@@ -42,7 +42,7 @@ public class PayloadService {
     @Transactional
     public void deletePayload(long payloadId) {
         var existsPayload = repository.existsById(payloadId);
-        if(!existsPayload){
+        if (!existsPayload) {
             throw new PayloadNotFoundException("Payload is not exists");
         }
         repository.deleteById(payloadId);

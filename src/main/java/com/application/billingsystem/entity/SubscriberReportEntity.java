@@ -14,6 +14,10 @@ import java.util.List;
 @Table(name = "subscriber_report")
 public class SubscriberReportEntity {
 
+    /**
+     * Сущность отчета по тарификации
+     **/
+
     @Id
     @SequenceGenerator(
             name = "subscriber_id_seq",
@@ -59,12 +63,12 @@ public class SubscriberReportEntity {
         payloads = new ArrayList<>();
     }
 
-    public SubscriberReportEntity addPayload(PayloadEntity payload){
+    public SubscriberReportEntity addPayload(PayloadEntity payload) {
         payloads.add(payload);
         return this;
     }
 
-    public SubscriberReportEntity removePayload(PayloadEntity payload){
+    public SubscriberReportEntity removePayload(PayloadEntity payload) {
         payloads.remove(payload);
         return this;
     }

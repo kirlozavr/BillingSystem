@@ -19,36 +19,36 @@ public class SubscriberReportService {
         this.repository = repository;
     }
 
-    public List<SubscriberReportEntity> getAllSubscriberReports(){
+    public List<SubscriberReportEntity> getAllSubscriberReports() {
         return repository.findAll();
     }
 
-    public SubscriberReportEntity getSubscriberReport(long subscriberReportId){
+    public SubscriberReportEntity getSubscriberReport(long subscriberReportId) {
         return repository.findById(subscriberReportId)
                 .orElseThrow(() -> new SubscriberReportNotFoundException("SubscriberReport not found"));
     }
 
-    public SubscriberReportEntity getSubscriberReport(String numberPhone){
+    public SubscriberReportEntity getSubscriberReport(String numberPhone) {
         return repository.findByNumberPhone(numberPhone)
                 .orElseThrow(() -> new SubscriberReportNotFoundException("SubscriberReport not found"));
     }
 
     @Transactional
-    public void createSubscriberReport(SubscriberReportEntity entity){
+    public void createSubscriberReport(SubscriberReportEntity entity) {
         repository.save(entity);
     }
 
     @Transactional
-    public void updateSubscriberReport(SubscriberReportEntity entity){
-        if(!repository.existsById(entity.getId())){
+    public void updateSubscriberReport(SubscriberReportEntity entity) {
+        if (!repository.existsById(entity.getId())) {
             throw new SubscriberReportNotFoundException("SubscriberReport not found");
         }
         repository.save(entity);
     }
 
     @Transactional
-    public void deleteSubscriberReport(long subscriberReportId){
-        if(!repository.existsById(subscriberReportId)){
+    public void deleteSubscriberReport(long subscriberReportId) {
+        if (!repository.existsById(subscriberReportId)) {
             throw new SubscriberReportNotFoundException("SubscriberReport is not exists");
         }
     }
