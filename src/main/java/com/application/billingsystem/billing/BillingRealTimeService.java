@@ -1,15 +1,13 @@
 package com.application.billingsystem.billing;
 
+import com.application.billingsystem.controllers.SubscriberReportController;
 import com.application.billingsystem.dto.SubscriberReportDto;
 import com.application.billingsystem.entity.CallDataRecordEntity;
 import com.application.billingsystem.entity.CallDataRecordPlusEntity;
 import com.application.billingsystem.entity.SubscriberEntity;
 import com.application.billingsystem.file_handler.FileReaderHandler;
 import com.application.billingsystem.file_handler.FileWriterHandler;
-import com.application.billingsystem.mapping.SubscriberReportMapper;
-import com.application.billingsystem.services.SubscriberReportService;
 import com.application.billingsystem.services.SubscriberService;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -21,55 +19,55 @@ import java.util.stream.Collectors;
 public class BillingRealTimeService implements BillingContract.BRT<SubscriberReportDto>{
 
     private final SubscriberService subscriberService;
-    private final SubscriberReportService subscriberReportService;
+    private final SubscriberReportController subscriberReportController;
     private final BillingContract.HRS contractHrs;
-    private final SubscriberReportMapper subscriberReportMapper = new SubscriberReportMapper();
 
     @Autowired
     public BillingRealTimeService(
             SubscriberService subscriberService,
-            SubscriberReportService subscriberReportService,
+            SubscriberReportController subscriberReportController,
             @Lazy BillingContract.HRS contractHrs
     ) {
         this.subscriberService = subscriberService;
-        this.subscriberReportService = subscriberReportService;
+        this.subscriberReportController = subscriberReportController;
         this.contractHrs = contractHrs;
     }
 
     @Override
-    public void run(@NotNull String filePath){
-        String path = generateNewCdrPlusFileFromCdrFile(filePath);
-
-        if (path != null){
-            contractHrs.run(path);
+    public void run(){
+        boolean isGenerate = generateNewCdrPlusFileFromCdrFile();
+        if (isGenerate){
+            contractHrs.run();
         }
     }
 
     /** Метод добавляет отчет в БД и обновляет баланс пользователя **/
     @Override
     public void putAndUpdateDataToDatabase(SubscriberReportDto dto) {
-        subscriberReportService
-                .createSubscriberReport(subscriberReportMapper.getDtoToEntity(dto));
+        subscriberReportController
+                .postSubscriberReport(dto);
     }
 
     /**
      * Метод генерирует CDR+ файл и возвращает path, если операция успешна, иначе null
      **/
-    private String generateNewCdrPlusFileFromCdrFile(String cdrFilePath) {
-        final List<CallDataRecordPlusEntity> callDataRecordPlusFinal = getListCallsAuthorizationFromCdrFile(cdrFilePath);
-        String path = null;
+    private boolean generateNewCdrPlusFileFromCdrFile() {
+        final List<CallDataRecordPlusEntity> callDataRecordPlusFinal = getListCallsAuthorizationFromCdrFile();
+
         if (callDataRecordPlusFinal != null) {
-            path = FileWriterHandler.writeCdrPlusFileAndReturnPath(callDataRecordPlusFinal);
+            FileWriterHandler.writeCdrPlusFileAndReturnPath(callDataRecordPlusFinal);
+            return true;
+        } else {
+            return false;
         }
-        return path;
     }
 
     /**
      * Метод получения получения списка CallDataRecordPlusEntity
      **/
-    private List<CallDataRecordPlusEntity> getListCallsAuthorizationFromCdrFile(String cdrFilePath) {
+    private List<CallDataRecordPlusEntity> getListCallsAuthorizationFromCdrFile() {
         final List<CallDataRecordEntity> callDataRecordEntityList =
-                FileReaderHandler.readCDRFileAndReturnListEntity(cdrFilePath); /** Список всех звонков из файла CDR **/
+                FileReaderHandler.readCDRFileAndReturnListEntity(); /** Список всех звонков из файла CDR **/
 
         if (!callDataRecordEntityList.isEmpty()) {
             /** Набор уникальных номеров, которые осуществляли разговор
@@ -106,6 +104,7 @@ public class BillingRealTimeService implements BillingContract.BRT<SubscriberRep
                                             subscriberAuthorization.get(entity.getNumberPhone()).getTariffIndex()
                                     )
                             ).collect(Collectors.toList());
+
             return callDataRecordPlusFinal;
         } else {
             return null;

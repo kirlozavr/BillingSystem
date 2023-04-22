@@ -15,12 +15,12 @@ public interface BillingContract {
 
     }
     interface BRT<E> {
-        void run(String filePath);
+        void run();
 
         void putAndUpdateDataToDatabase(E entity);
     }
 
     interface HRS {
-        void run(String filePath);
+        void run();
     }
 }

@@ -2,6 +2,7 @@ package com.application.billingsystem.file_handler;
 
 import com.application.billingsystem.entity.CallDataRecordEntity;
 import com.application.billingsystem.entity.CallDataRecordPlusEntity;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -14,20 +15,19 @@ import java.util.List;
  **/
 public class FileReaderHandler extends FileHandler {
 
-
     /**
      * Метод читает CDR файл и возвращает список
      **/
-    public static List<CallDataRecordEntity> readCDRFileAndReturnListEntity(String path) {
+    public static List<CallDataRecordEntity> readCDRFileAndReturnListEntity() {
         List<CallDataRecordEntity> callDataRecordEntityList = new ArrayList<>();
 
         try {
-            FileReader fileReader = new FileReader(path);
+            FileReader fileReader = new FileReader(CDR_FILE_PATH);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                String[] lineArr = line.split(",");
+                String[] lineArr = line.split("\\s\\|\\s");
                 CallDataRecordEntity callDataRecordEntity = new CallDataRecordEntity(
                         lineArr[0],
                         lineArr[1],
@@ -48,16 +48,16 @@ public class FileReaderHandler extends FileHandler {
     /**
      * Метод читает CDR+ файл и возвращает список
      **/
-    public static List<CallDataRecordPlusEntity> readCDRPlusFileAndReturnListEntity(String path) {
+    public static List<CallDataRecordPlusEntity> readCDRPlusFileAndReturnListEntity() {
         List<CallDataRecordPlusEntity> callDataRecordPlusEntityList = new ArrayList<>();
 
         try {
-            FileReader fileReader = new FileReader(path);
+            FileReader fileReader = new FileReader(CDR_PLUS_FILE_PATH);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                String[] lineArr = line.split(",");
+                String[] lineArr = line.split("\\s\\|\\s");
                 CallDataRecordPlusEntity callDataRecordPlusEntity = new CallDataRecordPlusEntity(
                         lineArr[0],
                         lineArr[1],

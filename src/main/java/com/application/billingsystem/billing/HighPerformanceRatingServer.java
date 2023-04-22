@@ -1,7 +1,5 @@
 package com.application.billingsystem.billing;
 
-
-import com.application.billingsystem.billing.BillingContract;
 import com.application.billingsystem.dto.SubscriberReportDto;
 import com.application.billingsystem.entity.*;
 import com.application.billingsystem.file_handler.FileReaderHandler;
@@ -31,21 +29,21 @@ public class HighPerformanceRatingServer implements BillingContract.HRS {
     }
 
     @Override
-    public void run(String filePath) {
-        sortingSubscriberCalls(filePath);
+    public void run() {
+        sortingSubscriberCalls();
     }
 
     /**
      * Метод сортирует CDR+ по абонентам
      **/
-    private void sortingSubscriberCalls(String filePath) {
+    private void sortingSubscriberCalls() {
         /** Кэш тарифов, чтобы лишний раз не обращаться в БД, где ключ - индекс тарифа **/
         final Map<String, TariffEntity> tariffEntityHashMap = new HashMap<>();
         /** Список CDR+ сущностей, где ключ - номер телефона абонента **/
         final Map<String, DataListEntity<CallDataRecordPlusEntity>> cdrPlusHashMap = new HashMap<>();
         /** Читаем CDR+ и получаем информацию в списке **/
         final List<CallDataRecordPlusEntity> callDataRecordPlusEntityList =
-                FileReaderHandler.readCDRPlusFileAndReturnListEntity(filePath);
+                FileReaderHandler.readCDRPlusFileAndReturnListEntity();
 
         TariffEntity tariff;
 
@@ -149,6 +147,7 @@ public class HighPerformanceRatingServer implements BillingContract.HRS {
                 }
             }
 
+            totalCost += cost;
             subscriberReport.addPayload(
                     new PayloadEntity(
                             entity.getCallType(),
