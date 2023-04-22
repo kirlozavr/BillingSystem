@@ -21,13 +21,17 @@ public class DateMapper {
     }
 
     /** Текстовый формат из LocalDateTime **/
-    public static String getLocalDateTimeToString(LocalDateTime localDateTime) {
+    public static String getLocalDateTimeToStringInput(LocalDateTime localDateTime) {
+        return DATE_TIME_FORMATTER_INPUT.format(localDateTime);
+    }
+
+    public static String getLocalDateTimeToStringOutput(LocalDateTime localDateTime) {
         return DATE_TIME_FORMATTER_OUTPUT.format(localDateTime);
     }
 
     /** Получить текстовый формат yyyy-MM-dd HH:mm:ss из yyyyMMddHHmmss **/
     public static String getStringToDateTimeString(String dateTime){
-        return DateMapper.getLocalDateTimeToString(
+        return DateMapper.getLocalDateTimeToStringOutput(
                 DateMapper.getStringToLocaleDateTime(dateTime)
         );
     }
