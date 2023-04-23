@@ -1,6 +1,6 @@
 package com.application.billingsystem.configurations;
 
-import com.application.billingsystem.billing.DataGenerator;
+import com.application.billingsystem.utils.DataGenerator;
 import com.application.billingsystem.dto.SubscriberCreateDto;
 import com.application.billingsystem.mapping.SubscriberMapper;
 import com.application.billingsystem.repositories.SubscriberRepository;
