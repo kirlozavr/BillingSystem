@@ -1,15 +1,13 @@
 package com.application.billingsystem.controllers;
 
-import com.application.billingsystem.main.FloatCompare;
 import com.application.billingsystem.dto.SubscriberCreateDto;
 import com.application.billingsystem.dto.SubscriberDto;
-import com.application.billingsystem.entity.SubscriberEntity;
 import com.application.billingsystem.mapping.SubscriberMapper;
 import com.application.billingsystem.services.SubscriberService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping("*/subscriber")
@@ -23,63 +21,43 @@ public class SubscriberController {
     }
 
     @GetMapping("/")
-    public List<SubscriberDto> getAllSubscribers() {
-        return StreamSupport
-                .stream(service.getAllSubscribers().spliterator(), false)
+    public List<SubscriberDto> getAll() {
+        return service.getAll()
+                .stream()
                 .map(mapper::getEntityToDto)
                 .toList();
     }
 
-    @GetMapping(path = "/id={subscriberId}")
-    public SubscriberDto findById(@PathVariable("subscriberId") Long subscriberId) {
+    @GetMapping("/id={id}")
+    public SubscriberDto findById(@Valid @PathVariable("id") Long id) {
         return mapper
-                .getEntityToDto(service.getSubscriber(subscriberId));
+                .getEntityToDto(service.getById(id));
     }
 
-    @GetMapping(path = "/number={numberPhone}")
-    public SubscriberDto findByNumberPhone(@PathVariable("numberPhone") String numberPhone) {
+    @GetMapping("/numberPhone={numberPhone}")
+    public SubscriberDto findByNumberPhone(@Valid @PathVariable("numberPhone") String numberPhone) {
         return mapper
-                .getEntityToDto(service.getSubscriber(numberPhone));
+                .getEntityToDto(service.getByNumberPhone(numberPhone));
     }
 
-    @GetMapping(path = "/={numberPhone}")
-    public SubscriberDto findByNumberPhoneAndPositiveBalance(@PathVariable("numberPhone") String numberPhone) {
+    @GetMapping("/numberPhoneAndPositiveBalance={numberPhone}")
+    public SubscriberDto findByNumberPhoneAndPositiveBalance(@Valid @PathVariable("numberPhone") String numberPhone) {
         return mapper
-                .getEntityToDto(service.getSubscriberByNumberPhoneAndPositiveBalance(numberPhone));
+                .getEntityToDto(service.getByNumberPhoneAndPositiveBalance(numberPhone));
     }
 
-    @PostMapping
-    public void postSubscriber(@RequestBody SubscriberCreateDto createDto) {
-        service.createSubscriber(mapper.getCreateDtoToEntity(createDto));
+    @PostMapping("/")
+    public void post(@Valid @RequestBody SubscriberCreateDto createDto) {
+        service.create(mapper.getCreateDtoToEntity(createDto));
     }
 
-    @PutMapping(path = "/{subscriberId}")
-    public void putSubscriber(
-            @PathVariable("subscriberId") Long subscriberId,
-            @RequestBody SubscriberCreateDto createDto
-    ) {
-        SubscriberEntity subscriberEntity = service.getSubscriber(subscriberId);
-
-        if (createDto.getNumberPhone() != null &&
-                createDto.getNumberPhone().length() > 0 &&
-                !createDto.getNumberPhone().equals(subscriberEntity.getNumberPhone()) &&
-                service.getSubscriber(createDto.getNumberPhone()) == null) {
-            subscriberEntity.setNumberPhone(createDto.getNumberPhone());
-        }
-        if (createDto.getTariffIndex() != null &&
-                createDto.getTariffIndex().length() > 0 &&
-                !createDto.getTariffIndex().equals(subscriberEntity.getTariffIndex())) {
-            subscriberEntity.setTariffIndex(createDto.getTariffIndex());
-        }
-        if (createDto.getBalance() != subscriberEntity.getBalance()) {
-            subscriberEntity.setBalance(createDto.getBalance());
-        }
-
-        service.updateSubscriber(subscriberEntity);
+    @PutMapping(path = "/")
+    public void put(@Valid @RequestBody SubscriberDto subscriberDto) {
+        service.update(mapper.getDtoToEntity(subscriberDto));
     }
 
-    @DeleteMapping(path = "/{subscriberId}")
-    public void deleteSubscriber(@PathVariable("subscriberId") Long subscriberId) {
-        service.deleteSubscriber(subscriberId);
+    @DeleteMapping(path = "/{id}")
+    public void delete(@Valid @PathVariable("id") Long id) {
+        service.delete(id);
     }
 }

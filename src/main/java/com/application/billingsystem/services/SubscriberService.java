@@ -1,11 +1,16 @@
 package com.application.billingsystem.services;
 
 import com.application.billingsystem.entity.SubscriberEntity;
+import com.application.billingsystem.exceptions.IncorrectArgumentException;
+import com.application.billingsystem.exceptions.SubscriberExistsException;
 import com.application.billingsystem.exceptions.SubscriberNotFoundException;
 import com.application.billingsystem.repositories.SubscriberRepository;
+import com.application.billingsystem.utils.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class SubscriberService {
@@ -17,52 +22,80 @@ public class SubscriberService {
         this.repository = repository;
     }
 
-    public Iterable<SubscriberEntity> getAllSubscribers() {
+    public List<SubscriberEntity> getAll() {
         return repository.findAll();
     }
 
-    public SubscriberEntity getSubscriber(Long subscriberId) {
-        return repository.findById(subscriberId)
+    public SubscriberEntity getById(Long id) {
+
+        ValidationUtils.checkId(id);
+
+        return repository.findById(id)
                 .orElseThrow(() -> new SubscriberNotFoundException("Subscriber not found"));
     }
 
-    public SubscriberEntity getSubscriber(String numberPhone) {
+    public SubscriberEntity getByNumberPhone(String numberPhone) {
+
+        ValidationUtils.checkNumberPhone(numberPhone);
+
         return repository.findFirstByNumberPhone(numberPhone)
                 .orElseThrow(() -> new SubscriberNotFoundException("Subscriber not found"));
     }
 
-    public SubscriberEntity getSubscriberByNumberPhoneAndPositiveBalance(String numberPhone) {
+    public SubscriberEntity getByNumberPhoneAndPositiveBalance(String numberPhone) {
+
+        ValidationUtils.checkNumberPhone(numberPhone);
+
         return repository
                 .findFirstByNumberPhoneAndBalanceGreaterThan(numberPhone, 0)
                 .orElse(null);
     }
 
     @Transactional
-    public void createSubscriber(SubscriberEntity subscriber) {
-        var subscriberOptional = repository
-                .findFirstByNumberPhone(subscriber.getNumberPhone());
-        if (subscriberOptional.isPresent()) {
-            //throw new SubscriberNotFoundException("Subscriber is exists");
+    public void create(SubscriberEntity subscriber) {
 
-        } else {
-            repository.save(subscriber);
-        }
-    }
+        validate(subscriber);
 
-    @Transactional
-    public void updateSubscriber(SubscriberEntity subscriber) {
-        if (!repository.existsById(subscriber.getId())) {
-            throw new SubscriberNotFoundException("Subscriber not found");
+        var exists = repository
+                .existsByNumberPhone(subscriber.getNumberPhone());
+
+        if (exists) {
+            throw new SubscriberExistsException("Subscriber is exists");
         }
+
         repository.save(subscriber);
     }
 
     @Transactional
-    public void deleteSubscriber(Long subscriberId) {
-        var existsSubscriber = repository.existsById(subscriberId);
-        if (!existsSubscriber) {
+    public void update(SubscriberEntity subscriber) {
+
+        validate(subscriber);
+
+        if (!repository.existsById(subscriber.getId())) {
+            throw new SubscriberNotFoundException("Subscriber not found");
+        }
+
+        repository.save(subscriber);
+    }
+
+    @Transactional
+    public void delete(Long id) {
+
+        ValidationUtils.checkId(id);
+
+        if (!repository.existsById(id)) {
             throw new SubscriberNotFoundException("Subscriber is not exists");
         }
-        repository.deleteById(subscriberId);
+
+        repository.deleteById(id);
+    }
+
+    private void validate(SubscriberEntity entity) {
+        if (entity.getNumberPhone() == null) {
+            throw new IncorrectArgumentException("Номер телефона не указан");
+        }
+        if (entity.getTariffIndex() == null) {
+            throw new IncorrectArgumentException("Индекс тарифа не указан");
+        }
     }
 }

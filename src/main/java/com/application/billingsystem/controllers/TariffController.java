@@ -1,15 +1,13 @@
 package com.application.billingsystem.controllers;
 
-import com.application.billingsystem.main.FloatCompare;
 import com.application.billingsystem.dto.TariffCreateDto;
 import com.application.billingsystem.dto.TariffDto;
-import com.application.billingsystem.entity.TariffEntity;
 import com.application.billingsystem.mapping.TariffMapper;
 import com.application.billingsystem.services.TariffService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping("*/tariff")
@@ -22,79 +20,37 @@ public class TariffController {
     }
 
     @GetMapping("/")
-    public List<TariffDto> getAllTariff() {
-        return StreamSupport
-                .stream(service.gelAllTariffs().spliterator(), false)
+    public List<TariffDto> getAll() {
+        return service.gelAll()
+                .stream()
                 .map(mapper::getEntityToDto)
                 .toList();
     }
 
-    @GetMapping(path = "/id={tariffId}")
-    public TariffDto findById(@PathVariable("tariffId") Long tariffId) {
+    @GetMapping("/id={id}")
+    public TariffDto findById(@Valid @PathVariable("id") Long id) {
         return mapper
-                .getEntityToDto(service.getTariff(tariffId));
+                .getEntityToDto(service.getById(id));
     }
 
-    @GetMapping(path = "/tariff_index={tariffIndex}")
-    public TariffDto findByIndex(@PathVariable("tariffIndex") String tariffIndex) {
+    @GetMapping("/index={index}")
+    public TariffDto findByIndex(@Valid @PathVariable("index") String tariffIndex) {
         return mapper
-                .getEntityToDto(service.getTariff(tariffIndex));
+                .getEntityToDto(service.getByIndex(tariffIndex));
     }
 
-    @PostMapping
-    public void postTariff(@RequestBody TariffCreateDto createDto) {
-        service.createTariff(mapper.getCreateDtoToEntity(createDto));
+    @PostMapping("/")
+    public void post(@Valid @RequestBody TariffCreateDto createDto) {
+        service.create(mapper.getCreateDtoToEntity(createDto));
     }
 
-    @PutMapping(path = "/{tariffId}")
-    public void putTariff(
-            @PathVariable("tariffId") Long tariffId,
-            @RequestBody TariffCreateDto createDto
-    ) {
-        TariffEntity tariffEntity = service.getTariff(tariffId);
-
-        if (createDto.getTariffIndex() != null &&
-                createDto.getTariffIndex().length() > 0 &&
-                !createDto.getTariffIndex().equals(tariffEntity.getTariffIndex()) &&
-                service.getTariff(createDto.getTariffIndex()) == null) {
-            tariffEntity.setTariffIndex(createDto.getTariffIndex());
-        }
-        if (createDto.getNameTariff() != null &&
-                createDto.getNameTariff().length() > 0 &&
-                !createDto.getNameTariff().equals(tariffEntity.getNameTariff())) {
-            tariffEntity.setNameTariff(createDto.getNameTariff());
-        }
-        if (createDto.getMinuteLimit() > 0.0f &&
-                !FloatCompare.isEquals(createDto.getMinuteLimit(), tariffEntity.getMinuteLimit())) {
-            tariffEntity.setMinuteLimit(createDto.getMinuteLimit());
-        }
-        if (createDto.getOutBetBeforeLimit() > 0.0f &&
-                !FloatCompare.isEquals(createDto.getOutBetBeforeLimit(), tariffEntity.getOutBetBeforeLimit())) {
-            tariffEntity.setOutBetBeforeLimit(createDto.getOutBetBeforeLimit());
-        }
-        if (createDto.getOutBetAfterLimit() > 0.0f &&
-                !FloatCompare.isEquals(createDto.getOutBetAfterLimit(), tariffEntity.getOutBetAfterLimit())) {
-            tariffEntity.setOutBetAfterLimit(createDto.getOutBetAfterLimit());
-        }
-        if (createDto.getInBetBeforeLimit() > 0.0f &&
-                !FloatCompare.isEquals(createDto.getInBetBeforeLimit(), tariffEntity.getInBetBeforeLimit())) {
-            tariffEntity.setInBetBeforeLimit(createDto.getInBetBeforeLimit());
-        }
-        if (createDto.getSubscriberPayment() > 0.0f &&
-                !FloatCompare.isEquals(createDto.getSubscriberPayment(), tariffEntity.getSubscriberPayment())) {
-            tariffEntity.setSubscriberPayment(createDto.getSubscriberPayment());
-        }
-        if (createDto.getMonetaryUnit() != null &&
-                createDto.getMonetaryUnit().length() > 0 &&
-                !createDto.getMonetaryUnit().equals(tariffEntity.getMonetaryUnit())) {
-            tariffEntity.setMonetaryUnit(createDto.getMonetaryUnit());
-        }
-
-        service.updateTariff(tariffEntity);
+    @PutMapping("/")
+    public void put(@Valid @RequestBody TariffDto tariffDto) {
+        service.update(mapper.getDtoToEntity(tariffDto));
     }
 
-    @DeleteMapping(path = "/{tariffId}")
-    public void deleteTariff(@PathVariable("tariffId") Long tariffId) {
-        service.deleteTariff(tariffId);
+    @DeleteMapping("/{id}")
+    public void deleteTariff(@Valid @PathVariable("id") Long id) {
+        service.delete(id);
     }
 }

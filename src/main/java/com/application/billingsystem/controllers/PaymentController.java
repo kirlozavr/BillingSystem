@@ -1,18 +1,15 @@
 package com.application.billingsystem.controllers;
 
-import com.application.billingsystem.entity.SubscriberEntity;
-import com.application.billingsystem.main.FloatCompare;
 import com.application.billingsystem.dto.PaymentCreateDto;
 import com.application.billingsystem.dto.PaymentDto;
-import com.application.billingsystem.entity.PaymentEntity;
 import com.application.billingsystem.mapping.PaymentMapper;
 import com.application.billingsystem.services.PaymentService;
 import com.application.billingsystem.services.SubscriberService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping("*/payment")
@@ -32,55 +29,56 @@ public class PaymentController {
     }
 
     @GetMapping("/")
-    public List<PaymentDto> getAllPayments() {
-        return StreamSupport
-                .stream(service.getAllPayments().spliterator(), false)
+    public List<PaymentDto> getAll() {
+        return service.getAll()
+                .stream()
                 .map(mapper::getEntityToDto)
                 .toList();
     }
 
-    @GetMapping(path = "/id={paymentId}")
-    public PaymentDto findById(@PathVariable("paymentId") Long paymentId) {
+    @GetMapping("/numberPhone={numberPhone}")
+    public List<PaymentDto> getAllByNumberPhone(@Valid @PathVariable("numberPhone") String numberPhone) {
+        return service.getAllByNumberPhone(numberPhone)
+                .stream()
+                .map(mapper::getEntityToDto)
+                .toList();
+    }
+
+    @GetMapping("/id={id}")
+    public PaymentDto findById(@Valid @PathVariable("id") Long id) {
         return mapper
-                .getEntityToDto(service.getPayment(paymentId));
+                .getEntityToDto(service.getById(id));
     }
 
-    @PostMapping
-    public void postPayment(@RequestBody PaymentCreateDto createDto) {
-        service.createPayment(mapper.getCreateDtoToEntity(createDto));
-        updateSubscriberBalance(createDto, createDto.getMoney());
+    @PostMapping("/")
+    public void post(@Valid @RequestBody PaymentCreateDto createDto) {
+        var paymentEntity = mapper.getCreateDtoToEntity(createDto);
+
+        updateSubscriberBalance(mapper.getEntityToDto(paymentEntity), createDto.getMoney());
+        service.create(mapper.getCreateDtoToEntity(createDto));
     }
 
-    @PutMapping(path = "/{paymentId}")
-    public void putPayment(
-            @PathVariable("paymentId") Long paymentId,
-            @RequestBody PaymentCreateDto createDto
-    ) {
-        PaymentEntity paymentEntity = service.getPayment(paymentId);
-        long totalMoney = createDto.getMoney();
+    @PutMapping("/")
+    public void put(@Valid @RequestBody PaymentDto paymentDto) {
+        var paymentEntity = service.getById(paymentDto.getId());
+        long totalMoney = 0;
 
-        if (createDto.getNumberPhone() != null &&
-                createDto.getNumberPhone().length() > 0 &&
-                !createDto.getNumberPhone().equals(paymentEntity.getNumberPhone())) {
-            paymentEntity.setNumberPhone(createDto.getNumberPhone());
-        }
-        if (createDto.getMoney() != paymentEntity.getMoney()) {
-            totalMoney -= paymentEntity.getMoney();
-            paymentEntity.setMoney(createDto.getMoney());
+        if (paymentDto.getMoney() != paymentEntity.getMoney()) {
+            totalMoney = paymentDto.getMoney() - paymentEntity.getMoney();
         }
 
-        updateSubscriberBalance(createDto, totalMoney);
-        service.updatePayment(paymentEntity);
+        updateSubscriberBalance(paymentDto, totalMoney);
+        service.update(paymentEntity);
     }
 
-    @DeleteMapping("/{paymentId}")
-    public void deletePayment(@PathVariable("paymentId") Long paymentId) {
-        service.deletePayment(paymentId);
+    @DeleteMapping("/{id}")
+    public void delete(@Valid @PathVariable("id") Long id) {
+        service.delete(id);
     }
 
-    private void updateSubscriberBalance(PaymentCreateDto createDto, long totalMoney) {
-        SubscriberEntity subscriberEntity = subscriberService.getSubscriber(createDto.getNumberPhone());
+    private void updateSubscriberBalance(PaymentDto paymentDto, long totalMoney) {
+        var subscriberEntity = subscriberService.getByNumberPhone(paymentDto.getNumberPhone());
         subscriberEntity.setBalance(subscriberEntity.getBalance() + totalMoney);
-        subscriberService.updateSubscriber(subscriberEntity);
+        subscriberService.update(subscriberEntity);
     }
 }

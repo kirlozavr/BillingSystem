@@ -1,11 +1,15 @@
 package com.application.billingsystem.services;
 
 import com.application.billingsystem.entity.PaymentEntity;
+import com.application.billingsystem.exceptions.IncorrectArgumentException;
 import com.application.billingsystem.exceptions.PaymentNotFoundException;
 import com.application.billingsystem.repositories.PaymentRepository;
+import com.application.billingsystem.utils.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class PaymentService {
@@ -17,33 +21,61 @@ public class PaymentService {
         this.repository = repository;
     }
 
-    public Iterable<PaymentEntity> getAllPayments() {
+    public List<PaymentEntity> getAll() {
         return repository.findAll();
     }
 
-    public PaymentEntity getPayment(long payId) {
-        return repository.findById(payId)
-                .orElseThrow(() -> new PaymentNotFoundException("Pay not found"));
+    public List<PaymentEntity> getAllByNumberPhone(String numberPhone) {
+
+        ValidationUtils.checkNumberPhone(numberPhone);
+
+        return repository.findAllByNumberPhone(numberPhone);
+    }
+
+    public PaymentEntity getById(long id) {
+
+        ValidationUtils.checkId(id);
+
+        return repository.findById(id)
+                .orElseThrow(() -> new PaymentNotFoundException("Payment not found"));
     }
 
     @Transactional
-    public void createPayment(PaymentEntity pay) {
-        repository.save(pay);
+    public void create(PaymentEntity payment) {
+
+        validate(payment);
+
+        repository.save(payment);
     }
 
     @Transactional
-    public void updatePayment(PaymentEntity pay) {
-        if (!repository.existsById(pay.getId())) {
-            throw new PaymentNotFoundException("Pay not found");
+    public void update(PaymentEntity payment) {
+
+        validate(payment);
+
+        if (!repository.existsById(payment.getId())) {
+            throw new PaymentNotFoundException("Payment not found");
         }
-        repository.save(pay);
+
+        repository.save(payment);
     }
 
     @Transactional
-    public void deletePayment(long payId) {
-        if (!repository.existsById(payId)) {
-            throw new PaymentNotFoundException("Pay is not exists");
+    public void delete(long id) {
+
+        ValidationUtils.checkId(id);
+
+        if (!repository.existsById(id)) {
+            throw new PaymentNotFoundException("Payment is not exists");
         }
-        repository.deleteById(payId);
+
+        repository.deleteById(id);
+    }
+
+    private void validate(PaymentEntity payment) {
+        if (payment.getNumberPhone() == null) {
+            throw new IncorrectArgumentException("Номер телефона не указан");
+        }
+        ValidationUtils.checkPayment(payment.getMoney());
     }
 }

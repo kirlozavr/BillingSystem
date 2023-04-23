@@ -1,12 +1,12 @@
 package com.application.billingsystem.billing;
 
+import com.application.billingsystem.annotations.BillingInfo;
 import com.application.billingsystem.controllers.SubscriberReportController;
 import com.application.billingsystem.dto.SubscriberReportDto;
 import com.application.billingsystem.entity.CallDataRecordEntity;
 import com.application.billingsystem.entity.CallDataRecordPlusEntity;
 import com.application.billingsystem.entity.SubscriberEntity;
-import com.application.billingsystem.file_handler.FileReaderHandler;
-import com.application.billingsystem.file_handler.FileWriterHandler;
+import com.application.billingsystem.file_handler.FileHandler;
 import com.application.billingsystem.services.SubscriberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -21,19 +21,26 @@ public class BillingRealTimeService implements BillingContract.BRT<SubscriberRep
     private final SubscriberService subscriberService;
     private final SubscriberReportController subscriberReportController;
     private final BillingContract.HRS contractHrs;
+    private final FileHandler.Write fileWriter;
+    private final FileHandler.Read fileRead;
 
     @Autowired
     public BillingRealTimeService(
             SubscriberService subscriberService,
             SubscriberReportController subscriberReportController,
-            @Lazy BillingContract.HRS contractHrs
+            @Lazy BillingContract.HRS contractHrs,
+            FileHandler.Write fileWriter,
+            FileHandler.Read fileRead
     ) {
         this.subscriberService = subscriberService;
         this.subscriberReportController = subscriberReportController;
         this.contractHrs = contractHrs;
+        this.fileWriter = fileWriter;
+        this.fileRead = fileRead;
     }
 
     @Override
+    @BillingInfo("Запущена тарификация в HRS")
     public void run(){
         boolean isGenerate = generateNewCdrPlusFileFromCdrFile();
         if (isGenerate){
@@ -41,11 +48,13 @@ public class BillingRealTimeService implements BillingContract.BRT<SubscriberRep
         }
     }
 
-    /** Метод добавляет отчет в БД и обновляет баланс пользователя **/
+    /** Метод добавляет отчет в БД и обновляет баланс пользователя,
+     * если у totalCost есть дробная часть, она округляется в большую сторону и списывается со счета абонента,
+     * например: 70.3 -> 71, 70.5 -> 71, 70.8 -> 71
+     * **/
     @Override
     public void putAndUpdateDataToDatabase(SubscriberReportDto dto) {
-        subscriberReportController
-                .postSubscriberReport(dto);
+        subscriberReportController.post(dto);
     }
 
     /**
@@ -55,7 +64,7 @@ public class BillingRealTimeService implements BillingContract.BRT<SubscriberRep
         final List<CallDataRecordPlusEntity> callDataRecordPlusFinal = getListCallsAuthorizationFromCdrFile();
 
         if (callDataRecordPlusFinal != null) {
-            FileWriterHandler.writeCdrPlusFileAndReturnPath(callDataRecordPlusFinal);
+            fileWriter.writeCdrPlusFileAndReturnPath(callDataRecordPlusFinal);
             return true;
         } else {
             return false;
@@ -67,7 +76,7 @@ public class BillingRealTimeService implements BillingContract.BRT<SubscriberRep
      **/
     private List<CallDataRecordPlusEntity> getListCallsAuthorizationFromCdrFile() {
         final List<CallDataRecordEntity> callDataRecordEntityList =
-                FileReaderHandler.readCDRFileAndReturnListEntity(); /** Список всех звонков из файла CDR **/
+                fileRead.readCDRFileAndReturnListEntity(); /** Список всех звонков из файла CDR **/
 
         if (!callDataRecordEntityList.isEmpty()) {
             /** Набор уникальных номеров, которые осуществляли разговор
@@ -83,7 +92,7 @@ public class BillingRealTimeService implements BillingContract.BRT<SubscriberRep
              * И записываем в карту, где ключ - номер телефона **/
             for (String numberPhone : callDataRecordEntitySet) {
                 SubscriberEntity subscriber = subscriberService
-                        .getSubscriberByNumberPhoneAndPositiveBalance(numberPhone);
+                        .getByNumberPhoneAndPositiveBalance(numberPhone);
                 if (subscriber != null) {
                     subscriberAuthorization.put(subscriber.getNumberPhone(), subscriber);
                 }

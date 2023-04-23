@@ -1,20 +1,16 @@
 package com.application.billingsystem.controllers;
 
 import com.application.billingsystem.dto.SubscriberReportDto;
-import com.application.billingsystem.entity.SubscriberEntity;
-import com.application.billingsystem.entity.SubscriberReportEntity;
-import com.application.billingsystem.main.FloatCompare;
+import com.application.billingsystem.utils.FloatCompare;
 import com.application.billingsystem.mapping.SubscriberReportMapper;
 import com.application.billingsystem.services.SubscriberReportService;
 import com.application.billingsystem.services.SubscriberService;
-import lombok.extern.slf4j.Slf4j;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.StreamSupport;
 
-@Slf4j
 @RestController
 @RequestMapping("*/report")
 public class SubscriberReportController {
@@ -32,83 +28,68 @@ public class SubscriberReportController {
         this.subscriberService = subscriberService;
     }
 
-    @GetMapping(path = "/")
-    public List<SubscriberReportDto> getAllReports() {
-        return StreamSupport
-                .stream(service.getAllSubscriberReports().spliterator(), false)
+    @GetMapping("/")
+    public List<SubscriberReportDto> getAll() {
+        return service.getAll()
+                .stream()
                 .map(mapper::getEntityToDto)
                 .toList();
     }
 
-    @GetMapping(path = "/id={subscriberReportId}")
-    public SubscriberReportDto findById(@PathVariable("subscriberReportId") Long subscriberReportId) {
-        return mapper
-                .getEntityToDto(service.getSubscriberReport(subscriberReportId));
+    @GetMapping("/allByNumberPhone={numberPhone}")
+    public List<SubscriberReportDto> getAllByNumberPhone(@Valid @PathVariable("numberPhone") String numberPhone) {
+        return service.getAllByNumberPhone(numberPhone)
+                .stream()
+                .map(mapper::getEntityToDto)
+                .toList();
     }
 
-    @GetMapping(path = "/number_phone={numberPhone}")
-    public SubscriberReportDto findByNumberPhone(@PathVariable("numberPhone") String numberPhone) {
+    @GetMapping("/id={id}")
+    public SubscriberReportDto findById(@Valid @PathVariable("id") Long id) {
         return mapper
-                .getEntityToDto(service.getSubscriberReport(numberPhone));
+                .getEntityToDto(service.getById(id));
     }
 
-    @PostMapping
-    public void postSubscriberReport(@RequestBody SubscriberReportDto subscriberReportDto) {
-        service.createSubscriberReport(mapper.getDtoToEntity(subscriberReportDto));
+    @GetMapping("/numberPhone={numberPhone}")
+    public SubscriberReportDto findByNumberPhone(@Valid @PathVariable("numberPhone") String numberPhone) {
+        return mapper
+                .getEntityToDto(service.getByNumberPhone(numberPhone));
+    }
+
+    @PostMapping("/")
+    public void post(@Valid @RequestBody SubscriberReportDto subscriberReportDto) {
         updateSubscriberBalance(subscriberReportDto, subscriberReportDto.getTotalCost());
+        service.create(mapper.getDtoToEntity(subscriberReportDto));
     }
 
-    @PutMapping(path = "/{subscriberReportId}")
-    public void putSubscriberReport(
-            @PathVariable("subscriberReportId") Long subscriberReportId,
-            @RequestBody SubscriberReportDto subscriberReportDto
-    ) {
-        SubscriberReportEntity subscriberReportEntity = service.getSubscriberReport(subscriberReportId);
-        float totalCost = subscriberReportDto.getTotalCost();
+    @PutMapping("/{id}")
+    public void putSubscriberReport(@Valid @RequestBody SubscriberReportDto subscriberReportDto) {
+        var subscriberReportEntity = service.getById(subscriberReportDto.getId());
+        float totalCost = 0;
 
-
-        if (subscriberReportDto.getTariffIndex() != null &&
-                subscriberReportDto.getTariffIndex().length() > 0 &&
-                !subscriberReportDto.getTariffIndex().equals(subscriberReportEntity.getTariffIndex())
+        if (
+                !FloatCompare.isEquals(
+                        subscriberReportDto.getTotalCost(),
+                        subscriberReportEntity.getTotalCost()
+                )
         ) {
-            subscriberReportEntity.setTariffIndex(subscriberReportDto.getTariffIndex());
-        }
-        if (subscriberReportDto.getNumberPhone() != null &&
-                subscriberReportDto.getNumberPhone().length() > 0 &&
-                !subscriberReportDto.getNumberPhone().equals(subscriberReportEntity.getNumberPhone())
-        ) {
-            subscriberReportEntity.setNumberPhone(subscriberReportDto.getNumberPhone());
-        }
-        if (!subscriberReportDto.getPayloads().equals(subscriberReportEntity.getPayloads())) {
-            subscriberReportEntity.setPayloads(subscriberReportDto.getPayloads());
-        }
-        if (subscriberReportDto.getTotalCost() > 0.0f &&
-                !FloatCompare.isEquals(subscriberReportDto.getTotalCost(), subscriberReportEntity.getTotalCost())
-        ) {
-            totalCost -= subscriberReportEntity.getTotalCost();
-            subscriberReportEntity.setTotalCost(subscriberReportDto.getTotalCost());
-        }
-        if (subscriberReportDto.getMonetaryUnit() != null &&
-                subscriberReportDto.getMonetaryUnit().length() > 0 &&
-                !subscriberReportDto.getMonetaryUnit().equals(subscriberReportEntity.getMonetaryUnit())
-        ) {
-            subscriberReportEntity.setMonetaryUnit(subscriberReportDto.getMonetaryUnit());
+            totalCost = subscriberReportEntity.getTotalCost() - subscriberReportDto.getTotalCost();
         }
 
         updateSubscriberBalance(subscriberReportDto, totalCost);
-        service.updateSubscriberReport(subscriberReportEntity);
+        service.update(subscriberReportEntity);
     }
 
-    @DeleteMapping(path = "/{subscriberReportId}")
-    public void deleteSubscriberReport(@PathVariable("subscriberReportId") Long subscriberReportId) {
-        service.deleteSubscriberReport(subscriberReportId);
+    @DeleteMapping("/{id}")
+    public void delete(@Valid @PathVariable("id") Long id) {
+        service.delete(id);
     }
 
     private void updateSubscriberBalance(SubscriberReportDto subscriberReportDto, float totalCost) {
-        SubscriberEntity subscriberEntity = subscriberService
-                .getSubscriber(subscriberReportDto.getNumberPhone());
-        subscriberEntity.setBalance((long) (subscriberEntity.getBalance() - Math.ceil(totalCost)));
-        subscriberService.updateSubscriber(subscriberEntity);
+        var subscriberEntity = subscriberService
+                .getByNumberPhone(subscriberReportDto.getNumberPhone());
+        subscriberEntity.setBalance((long) (subscriberEntity.getBalance() + Math.ceil(totalCost)));
+        subscriberService.update(subscriberEntity);
     }
 
 }
