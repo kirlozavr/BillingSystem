@@ -22,12 +22,10 @@ public class ValidationUtils {
     /** Понятное дело, что код номера бывает разный и соответственно длина номера разная,
      * плюсом есть спец. символы, но в рамках этого задания сделана упрощенная проверка **/
     public static void checkNumberPhone(String numberPhone){
-        var regex = "[0-9]";
+        var regex = "\\d{11}";
         var pattern = Pattern.compile(regex);
-        if(numberPhone.length() != 11){
-            throw new IncorrectArgumentException("Номер телефона не может быть меньше 11 символов");
-        } else if(!pattern.matcher(numberPhone).matches()){
-            throw new IncorrectArgumentException("Номер телефона должен состоять из цифр");
+        if(!pattern.matcher(numberPhone).matches()){
+            throw new IncorrectArgumentException("Номер телефона не может быть меньше 11 символов и должен состоять из цифр");
         }
     }
 
