@@ -26,7 +26,6 @@ public class PayloadService {
     }
 
     public PayloadEntity getById(long id) {
-
         ValidationUtils.checkId(id);
 
         return repository.findById(id)
@@ -35,15 +34,12 @@ public class PayloadService {
 
     @Transactional
     public void create(PayloadEntity payload) {
-
         validate(payload);
-
         repository.save(payload);
     }
 
     @Transactional
     public void update(PayloadEntity payload) {
-
         validate(payload);
 
         if (!repository.existsById(payload.getId())) {
@@ -55,7 +51,6 @@ public class PayloadService {
 
     @Transactional
     public void delete(long id) {
-
         ValidationUtils.checkId(id);
 
         if (!repository.existsById(id)) {

@@ -27,7 +27,6 @@ public class SubscriberService {
     }
 
     public SubscriberEntity getById(Long id) {
-
         ValidationUtils.checkId(id);
 
         return repository.findById(id)
@@ -35,7 +34,6 @@ public class SubscriberService {
     }
 
     public SubscriberEntity getByNumberPhone(String numberPhone) {
-
         ValidationUtils.checkNumberPhone(numberPhone);
 
         return repository.findFirstByNumberPhone(numberPhone)
@@ -43,7 +41,6 @@ public class SubscriberService {
     }
 
     public SubscriberEntity getByNumberPhoneAndPositiveBalance(String numberPhone) {
-
         ValidationUtils.checkNumberPhone(numberPhone);
 
         return repository
@@ -53,7 +50,6 @@ public class SubscriberService {
 
     @Transactional
     public void create(SubscriberEntity subscriber) {
-
         validate(subscriber);
 
         var exists = repository
@@ -68,7 +64,6 @@ public class SubscriberService {
 
     @Transactional
     public void update(SubscriberEntity subscriber) {
-
         validate(subscriber);
 
         if (!repository.existsById(subscriber.getId())) {
@@ -80,7 +75,6 @@ public class SubscriberService {
 
     @Transactional
     public void delete(Long id) {
-
         ValidationUtils.checkId(id);
 
         if (!repository.existsById(id)) {

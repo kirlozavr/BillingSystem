@@ -27,7 +27,6 @@ public class TariffService {
     }
 
     public TariffEntity getById(Long id) {
-
         ValidationUtils.checkId(id);
 
         return repository.findById(id)
@@ -35,7 +34,6 @@ public class TariffService {
     }
 
     public TariffEntity getByIndex(String tariffIndex) {
-
         ValidationUtils.checkIndex(tariffIndex);
 
         return repository.findFirstByTariffIndex(tariffIndex)
@@ -44,7 +42,6 @@ public class TariffService {
 
     @Transactional
     public void create(TariffEntity tariff) {
-
         validate(tariff);
 
         var exists = repository.existsByTariffIndex(tariff.getTariffIndex());
@@ -58,7 +55,6 @@ public class TariffService {
 
     @Transactional
     public void update(TariffEntity tariff) {
-
         validate(tariff);
 
         if (!repository.existsById(tariff.getId())) {
@@ -70,7 +66,6 @@ public class TariffService {
 
     @Transactional
     public void delete(Long id) {
-
         ValidationUtils.checkId(id);
 
         if (!repository.existsById(id)) {

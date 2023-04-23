@@ -12,5 +12,4 @@ public interface SubscriberReportRepository
         extends JpaRepository<SubscriberReportEntity, Long> {
 
     List<SubscriberReportEntity> findAllByNumberPhone(String numberPhone);
-    Optional<SubscriberReportEntity> findFirstByNumberPhone(String numberPhone);
 }

@@ -36,7 +36,7 @@ public class SubscriberReportController {
                 .toList();
     }
 
-    @GetMapping("/allByNumberPhone={numberPhone}")
+    @GetMapping("/numberPhone={numberPhone}")
     public List<SubscriberReportDto> getAllByNumberPhone(@Valid @PathVariable("numberPhone") String numberPhone) {
         return service.getAllByNumberPhone(numberPhone)
                 .stream()
@@ -50,12 +50,6 @@ public class SubscriberReportController {
                 .getEntityToDto(service.getById(id));
     }
 
-    @GetMapping("/numberPhone={numberPhone}")
-    public SubscriberReportDto findByNumberPhone(@Valid @PathVariable("numberPhone") String numberPhone) {
-        return mapper
-                .getEntityToDto(service.getByNumberPhone(numberPhone));
-    }
-
     @PostMapping("/")
     public void post(@Valid @RequestBody SubscriberReportDto subscriberReportDto) {
         updateSubscriberBalance(subscriberReportDto, subscriberReportDto.getTotalCost());
@@ -63,7 +57,7 @@ public class SubscriberReportController {
     }
 
     @PutMapping("/{id}")
-    public void putSubscriberReport(@Valid @RequestBody SubscriberReportDto subscriberReportDto) {
+    public void put(@Valid @RequestBody SubscriberReportDto subscriberReportDto) {
         var subscriberReportEntity = service.getById(subscriberReportDto.getId());
         float totalCost = 0;
 

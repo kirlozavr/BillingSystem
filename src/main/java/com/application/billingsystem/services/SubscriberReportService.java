@@ -26,39 +26,25 @@ public class SubscriberReportService {
     }
 
     public List<SubscriberReportEntity> getAllByNumberPhone(String numberPhone) {
-
         ValidationUtils.checkNumberPhone(numberPhone);
-
         return repository.findAllByNumberPhone(numberPhone);
     }
 
     public SubscriberReportEntity getById(long id) {
-
         ValidationUtils.checkId(id);
 
         return repository.findById(id)
                 .orElseThrow(() -> new SubscriberReportNotFoundException("SubscriberReport not found"));
     }
 
-    public SubscriberReportEntity getByNumberPhone(String numberPhone) {
-
-        ValidationUtils.checkNumberPhone(numberPhone);
-
-        return repository.findFirstByNumberPhone(numberPhone)
-                .orElseThrow(() -> new SubscriberReportNotFoundException("SubscriberReport not found"));
-    }
-
     @Transactional
     public void create(SubscriberReportEntity subscriberReport) {
-
         validate(subscriberReport);
-
         repository.save(subscriberReport);
     }
 
     @Transactional
     public void update(SubscriberReportEntity subscriberReport) {
-
         validate(subscriberReport);
 
         if (!repository.existsById(subscriberReport.getId())) {
@@ -70,7 +56,6 @@ public class SubscriberReportService {
 
     @Transactional
     public void delete(long id) {
-
         ValidationUtils.checkId(id);
 
         if (!repository.existsById(id)) {

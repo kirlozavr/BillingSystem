@@ -50,7 +50,7 @@ public class TariffController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteTariff(@Valid @PathVariable("id") Long id) {
+    public void delete(@Valid @PathVariable("id") Long id) {
         service.delete(id);
     }
 }

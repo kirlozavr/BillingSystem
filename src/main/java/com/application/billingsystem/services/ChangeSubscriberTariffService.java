@@ -26,14 +26,11 @@ public class ChangeSubscriberTariffService {
     }
 
     public List<ChangeSubscriberTariffEntity> getAllByNumberPhone(String numberPhone) {
-
         ValidationUtils.checkNumberPhone(numberPhone);
-
         return repository.findAllByNumberPhone(numberPhone);
     }
 
     public ChangeSubscriberTariffEntity getById(long id) {
-
         ValidationUtils.checkId(id);
 
         return repository.findById(id)
@@ -42,15 +39,12 @@ public class ChangeSubscriberTariffService {
 
     @Transactional
     public void create(ChangeSubscriberTariffEntity changeSubscriberTariff) {
-
         validate(changeSubscriberTariff);
-
         repository.save(changeSubscriberTariff);
     }
 
     @Transactional
     public void update(ChangeSubscriberTariffEntity changeSubscriberTariff) {
-
         validate(changeSubscriberTariff);
 
         if (!repository.existsById(changeSubscriberTariff.getId())) {
@@ -62,7 +56,6 @@ public class ChangeSubscriberTariffService {
 
     @Transactional
     public void delete(long id) {
-
         ValidationUtils.checkId(id);
 
         if (!repository.existsById(id)) {

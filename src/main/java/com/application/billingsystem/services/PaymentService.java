@@ -26,14 +26,12 @@ public class PaymentService {
     }
 
     public List<PaymentEntity> getAllByNumberPhone(String numberPhone) {
-
         ValidationUtils.checkNumberPhone(numberPhone);
 
         return repository.findAllByNumberPhone(numberPhone);
     }
 
     public PaymentEntity getById(long id) {
-
         ValidationUtils.checkId(id);
 
         return repository.findById(id)
@@ -42,15 +40,12 @@ public class PaymentService {
 
     @Transactional
     public void create(PaymentEntity payment) {
-
         validate(payment);
-
         repository.save(payment);
     }
 
     @Transactional
     public void update(PaymentEntity payment) {
-
         validate(payment);
 
         if (!repository.existsById(payment.getId())) {
@@ -62,7 +57,6 @@ public class PaymentService {
 
     @Transactional
     public void delete(long id) {
-
         ValidationUtils.checkId(id);
 
         if (!repository.existsById(id)) {
