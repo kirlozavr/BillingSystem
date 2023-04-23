@@ -1,7 +1,9 @@
 package com.application.billingsystem.file_handler;
 
+import com.application.billingsystem.annotations.FileHandlerInfo;
 import com.application.billingsystem.entity.CallDataRecordEntity;
 import com.application.billingsystem.entity.CallDataRecordPlusEntity;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -11,12 +13,15 @@ import java.util.List;
 /**
  * Класс отвечает за запись CDR и CDR+ файла.
  **/
-public class FileWriterHandler extends FileHandler {
+@Component
+public class FileWriterHandler implements FileHandler, FileHandler.Write{
 
     /**
      * Метод записывает CDR File из списка CallDataRecordEntity и возвращает true если успешно или false
      **/
-    public static boolean writeCdrFileAndReturnPath(List<CallDataRecordEntity> callDataRecordEntityList) {
+    @Override
+    @FileHandlerInfo("CDR file write successfully")
+    public boolean writeCdrFileAndReturnPath(List<CallDataRecordEntity> callDataRecordEntityList) {
         try {
             File file = new File(CDR_FILE_PATH);
             FileWriter fileWriter = new FileWriter(file, false);
@@ -43,7 +48,9 @@ public class FileWriterHandler extends FileHandler {
     /**
      * Метод записывает CDR+ File из списка CallDataRecordPlusEntity и возвращает true если успешно или false
      **/
-    public static boolean writeCdrPlusFileAndReturnPath(List<CallDataRecordPlusEntity> callDataRecordPlusEntityList) {
+    @Override
+    @FileHandlerInfo("CDR+ file write successfully")
+    public boolean writeCdrPlusFileAndReturnPath(List<CallDataRecordPlusEntity> callDataRecordPlusEntityList) {
         try {
             File file = new File(CDR_PLUS_FILE_PATH);
             FileWriter fileWriter = new FileWriter(file, false);

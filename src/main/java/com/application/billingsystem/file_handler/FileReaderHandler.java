@@ -1,8 +1,9 @@
 package com.application.billingsystem.file_handler;
 
+import com.application.billingsystem.annotations.FileHandlerInfo;
 import com.application.billingsystem.entity.CallDataRecordEntity;
 import com.application.billingsystem.entity.CallDataRecordPlusEntity;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -13,12 +14,15 @@ import java.util.List;
 /**
  * Класс отвечает за чтение CDR И CDR+.
  **/
-public class FileReaderHandler extends FileHandler {
+@Component
+public class FileReaderHandler implements FileHandler, FileHandler.Read {
 
     /**
      * Метод читает CDR файл и возвращает список
      **/
-    public static List<CallDataRecordEntity> readCDRFileAndReturnListEntity() {
+    @Override
+    @FileHandlerInfo("CDR file read successfully")
+    public List<CallDataRecordEntity> readCDRFileAndReturnListEntity() {
         List<CallDataRecordEntity> callDataRecordEntityList = new ArrayList<>();
 
         try {
@@ -48,7 +52,9 @@ public class FileReaderHandler extends FileHandler {
     /**
      * Метод читает CDR+ файл и возвращает список
      **/
-    public static List<CallDataRecordPlusEntity> readCDRPlusFileAndReturnListEntity() {
+    @Override
+    @FileHandlerInfo("CDR+ file read successfully")
+    public List<CallDataRecordPlusEntity> readCDRPlusFileAndReturnListEntity() {
         List<CallDataRecordPlusEntity> callDataRecordPlusEntityList = new ArrayList<>();
 
         try {
@@ -75,5 +81,4 @@ public class FileReaderHandler extends FileHandler {
 
         return callDataRecordPlusEntityList;
     }
-
 }
