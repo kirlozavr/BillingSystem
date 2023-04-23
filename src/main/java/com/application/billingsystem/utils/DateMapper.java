@@ -1,4 +1,4 @@
-package com.application.billingsystem.main;
+package com.application.billingsystem.utils;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
