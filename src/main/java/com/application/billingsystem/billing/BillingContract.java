@@ -12,11 +12,10 @@ import org.springframework.stereotype.Component;
 public interface BillingContract {
 
     interface CDR{
-
+        void run();
     }
     interface BRT<E> {
         void run();
-
         void putAndUpdateDataToDatabase(E entity);
     }
 
