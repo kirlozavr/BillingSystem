@@ -1,8 +1,8 @@
 package com.application.billingsystem.services;
 
 import com.application.billingsystem.entity.ChangeSubscriberTariffEntity;
-import com.application.billingsystem.exceptions.ChangeSubscriberTariffNotFoundException;
 import com.application.billingsystem.exceptions.IncorrectArgumentException;
+import com.application.billingsystem.exceptions.NotFoundException;
 import com.application.billingsystem.repositories.ChangeSubscriberTariffRepository;
 import com.application.billingsystem.utils.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class ChangeSubscriberTariffService {
         ValidationUtils.checkId(id);
 
         return repository.findById(id)
-                .orElseThrow(() -> new ChangeSubscriberTariffNotFoundException("changeSubscriberTariff not found"));
+                .orElseThrow(() -> new NotFoundException("changeSubscriberTariff not found"));
     }
 
     @Transactional
@@ -48,7 +48,7 @@ public class ChangeSubscriberTariffService {
         validate(changeSubscriberTariff);
 
         if (!repository.existsById(changeSubscriberTariff.getId())) {
-            throw new ChangeSubscriberTariffNotFoundException("ChangeSubscriberTariff not found");
+            throw new NotFoundException("ChangeSubscriberTariff not found");
         }
 
         repository.save(changeSubscriberTariff);
@@ -59,7 +59,7 @@ public class ChangeSubscriberTariffService {
         ValidationUtils.checkId(id);
 
         if (!repository.existsById(id)) {
-            throw new ChangeSubscriberTariffNotFoundException("ChangeSubscriberTariff is not exists");
+            throw new NotFoundException("ChangeSubscriberTariff is not exists");
         }
 
         repository.deleteById(id);

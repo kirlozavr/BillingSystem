@@ -5,14 +5,18 @@ import com.application.billingsystem.utils.FloatCompare;
 import com.application.billingsystem.mapping.SubscriberReportMapper;
 import com.application.billingsystem.services.SubscriberReportService;
 import com.application.billingsystem.services.SubscriberService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("*/report")
+@Tag(name = "Отчет абонента", description ="Контроллер позволяет выполнять основные crud операции с отчетоми абонентов")
 public class SubscriberReportController {
 
     private final SubscriberReportService service;
@@ -29,6 +33,8 @@ public class SubscriberReportController {
     }
 
     @GetMapping("/")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Получить все отчеты всех абонентов")
     public List<SubscriberReportDto> getAll() {
         return service.getAll()
                 .stream()
@@ -36,7 +42,9 @@ public class SubscriberReportController {
                 .toList();
     }
 
-    @GetMapping("/numberPhone={numberPhone}")
+    @GetMapping("/all/numberPhone={numberPhone}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Получить все отчеты абонента по номеру телефона")
     public List<SubscriberReportDto> getAllByNumberPhone(@Valid @PathVariable("numberPhone") String numberPhone) {
         return service.getAllByNumberPhone(numberPhone)
                 .stream()
@@ -45,18 +53,24 @@ public class SubscriberReportController {
     }
 
     @GetMapping("/id={id}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Получить отчет по id")
     public SubscriberReportDto findById(@Valid @PathVariable("id") Long id) {
         return mapper
                 .getEntityToDto(service.getById(id));
     }
 
     @PostMapping("/")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Создать новый отчет абонента, при создании отчета - изменяется баланс абонента")
     public void post(@Valid @RequestBody SubscriberReportDto subscriberReportDto) {
         updateSubscriberBalance(subscriberReportDto, subscriberReportDto.getTotalCost());
         service.create(mapper.getDtoToEntity(subscriberReportDto));
     }
 
     @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Обновить отчет абонента, если в отчете изменится стоимость услуг - то измениться баланс абонента")
     public void put(@Valid @RequestBody SubscriberReportDto subscriberReportDto) {
         var subscriberReportEntity = service.getById(subscriberReportDto.getId());
         float totalCost = 0;
@@ -75,6 +89,8 @@ public class SubscriberReportController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Удалить отчет по id")
     public void delete(@Valid @PathVariable("id") Long id) {
         service.delete(id);
     }

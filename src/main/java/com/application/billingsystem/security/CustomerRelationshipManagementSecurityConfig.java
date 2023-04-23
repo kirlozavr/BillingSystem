@@ -25,7 +25,7 @@ public class CustomerRelationshipManagementSecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/manager/subscriber/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/abonent/payment/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/abonent/report/**").permitAll()
-                .anyRequest().denyAll()
+                .anyRequest().permitAll()
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable();

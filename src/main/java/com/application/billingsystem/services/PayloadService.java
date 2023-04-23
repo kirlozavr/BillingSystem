@@ -2,7 +2,7 @@ package com.application.billingsystem.services;
 
 import com.application.billingsystem.entity.PayloadEntity;
 import com.application.billingsystem.exceptions.IncorrectArgumentException;
-import com.application.billingsystem.exceptions.PayloadNotFoundException;
+import com.application.billingsystem.exceptions.NotFoundException;
 import com.application.billingsystem.repositories.PayloadRepository;
 import com.application.billingsystem.utils.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class PayloadService {
         ValidationUtils.checkId(id);
 
         return repository.findById(id)
-                .orElseThrow(() -> new PayloadNotFoundException("Payload not found"));
+                .orElseThrow(() -> new NotFoundException("Payload not found"));
     }
 
     @Transactional
@@ -43,7 +43,7 @@ public class PayloadService {
         validate(payload);
 
         if (!repository.existsById(payload.getId())) {
-            throw new PayloadNotFoundException("Payload not found");
+            throw new NotFoundException("Payload not found");
         }
 
         repository.save(payload);
@@ -54,7 +54,7 @@ public class PayloadService {
         ValidationUtils.checkId(id);
 
         if (!repository.existsById(id)) {
-            throw new PayloadNotFoundException("Payload is not exists");
+            throw new NotFoundException("Payload is not exists");
         }
 
         repository.deleteById(id);

@@ -2,7 +2,7 @@ package com.application.billingsystem.services;
 
 import com.application.billingsystem.entity.SubscriberReportEntity;
 import com.application.billingsystem.exceptions.IncorrectArgumentException;
-import com.application.billingsystem.exceptions.SubscriberReportNotFoundException;
+import com.application.billingsystem.exceptions.NotFoundException;
 import com.application.billingsystem.repositories.SubscriberReportRepository;
 import com.application.billingsystem.utils.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class SubscriberReportService {
         ValidationUtils.checkId(id);
 
         return repository.findById(id)
-                .orElseThrow(() -> new SubscriberReportNotFoundException("SubscriberReport not found"));
+                .orElseThrow(() -> new NotFoundException("SubscriberReport not found"));
     }
 
     @Transactional
@@ -48,7 +48,7 @@ public class SubscriberReportService {
         validate(subscriberReport);
 
         if (!repository.existsById(subscriberReport.getId())) {
-            throw new SubscriberReportNotFoundException("SubscriberReport not found");
+            throw new NotFoundException("SubscriberReport not found");
         }
 
         repository.save(subscriberReport);
@@ -59,7 +59,7 @@ public class SubscriberReportService {
         ValidationUtils.checkId(id);
 
         if (!repository.existsById(id)) {
-            throw new SubscriberReportNotFoundException("SubscriberReport is not exists");
+            throw new NotFoundException("SubscriberReport is not exists");
         }
 
         repository.deleteById(id);

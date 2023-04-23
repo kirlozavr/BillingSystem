@@ -1,9 +1,9 @@
 package com.application.billingsystem.services;
 
 import com.application.billingsystem.entity.SubscriberEntity;
+import com.application.billingsystem.exceptions.AlreadyExistsException;
 import com.application.billingsystem.exceptions.IncorrectArgumentException;
-import com.application.billingsystem.exceptions.SubscriberExistsException;
-import com.application.billingsystem.exceptions.SubscriberNotFoundException;
+import com.application.billingsystem.exceptions.NotFoundException;
 import com.application.billingsystem.repositories.SubscriberRepository;
 import com.application.billingsystem.utils.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,14 +30,14 @@ public class SubscriberService {
         ValidationUtils.checkId(id);
 
         return repository.findById(id)
-                .orElseThrow(() -> new SubscriberNotFoundException("Subscriber not found"));
+                .orElseThrow(() -> new NotFoundException("Subscriber not found"));
     }
 
     public SubscriberEntity getByNumberPhone(String numberPhone) {
         ValidationUtils.checkNumberPhone(numberPhone);
 
         return repository.findFirstByNumberPhone(numberPhone)
-                .orElseThrow(() -> new SubscriberNotFoundException("Subscriber not found"));
+                .orElseThrow(() -> new NotFoundException("Subscriber not found"));
     }
 
     public SubscriberEntity getByNumberPhoneAndPositiveBalance(String numberPhone) {
@@ -56,7 +56,7 @@ public class SubscriberService {
                 .existsByNumberPhone(subscriber.getNumberPhone());
 
         if (exists) {
-            throw new SubscriberExistsException("Subscriber is exists");
+            throw new AlreadyExistsException("Subscriber is exists");
         }
 
         repository.save(subscriber);
@@ -67,7 +67,7 @@ public class SubscriberService {
         validate(subscriber);
 
         if (!repository.existsById(subscriber.getId())) {
-            throw new SubscriberNotFoundException("Subscriber not found");
+            throw new NotFoundException("Subscriber not found");
         }
 
         repository.save(subscriber);
@@ -78,7 +78,7 @@ public class SubscriberService {
         ValidationUtils.checkId(id);
 
         if (!repository.existsById(id)) {
-            throw new SubscriberNotFoundException("Subscriber is not exists");
+            throw new NotFoundException("Subscriber is not exists");
         }
 
         repository.deleteById(id);

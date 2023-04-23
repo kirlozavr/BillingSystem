@@ -2,7 +2,7 @@ package com.application.billingsystem.services;
 
 import com.application.billingsystem.entity.PaymentEntity;
 import com.application.billingsystem.exceptions.IncorrectArgumentException;
-import com.application.billingsystem.exceptions.PaymentNotFoundException;
+import com.application.billingsystem.exceptions.NotFoundException;
 import com.application.billingsystem.repositories.PaymentRepository;
 import com.application.billingsystem.utils.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class PaymentService {
         ValidationUtils.checkId(id);
 
         return repository.findById(id)
-                .orElseThrow(() -> new PaymentNotFoundException("Payment not found"));
+                .orElseThrow(() -> new NotFoundException("Payment not found"));
     }
 
     @Transactional
@@ -49,7 +49,7 @@ public class PaymentService {
         validate(payment);
 
         if (!repository.existsById(payment.getId())) {
-            throw new PaymentNotFoundException("Payment not found");
+            throw new NotFoundException("Payment not found");
         }
 
         repository.save(payment);
@@ -60,7 +60,7 @@ public class PaymentService {
         ValidationUtils.checkId(id);
 
         if (!repository.existsById(id)) {
-            throw new PaymentNotFoundException("Payment is not exists");
+            throw new NotFoundException("Payment is not exists");
         }
 
         repository.deleteById(id);

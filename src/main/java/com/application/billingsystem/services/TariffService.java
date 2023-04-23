@@ -1,9 +1,9 @@
 package com.application.billingsystem.services;
 
 import com.application.billingsystem.entity.TariffEntity;
+import com.application.billingsystem.exceptions.AlreadyExistsException;
 import com.application.billingsystem.exceptions.IncorrectArgumentException;
-import com.application.billingsystem.exceptions.TariffExistsException;
-import com.application.billingsystem.exceptions.TariffNotFoundException;
+import com.application.billingsystem.exceptions.NotFoundException;
 import com.application.billingsystem.repositories.TariffRepository;
 import com.application.billingsystem.utils.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,14 +30,14 @@ public class TariffService {
         ValidationUtils.checkId(id);
 
         return repository.findById(id)
-                .orElseThrow(() -> new TariffNotFoundException("Tariff not found"));
+                .orElseThrow(() -> new NotFoundException("Tariff not found"));
     }
 
     public TariffEntity getByIndex(String tariffIndex) {
         ValidationUtils.checkIndex(tariffIndex);
 
         return repository.findFirstByTariffIndex(tariffIndex)
-                .orElseThrow(() -> new TariffNotFoundException("Tariff not found"));
+                .orElseThrow(() -> new NotFoundException("Tariff not found"));
     }
 
     @Transactional
@@ -47,7 +47,7 @@ public class TariffService {
         var exists = repository.existsByTariffIndex(tariff.getTariffIndex());
 
         if (exists) {
-            throw new TariffExistsException("Tariff is exists");
+            throw new AlreadyExistsException("Tariff is exists");
         }
 
         repository.save(tariff);
@@ -58,7 +58,7 @@ public class TariffService {
         validate(tariff);
 
         if (!repository.existsById(tariff.getId())) {
-            throw new TariffNotFoundException("Tariff not found");
+            throw new NotFoundException("Tariff not found");
         }
 
         repository.save(tariff);
@@ -69,7 +69,7 @@ public class TariffService {
         ValidationUtils.checkId(id);
 
         if (!repository.existsById(id)) {
-            throw new TariffNotFoundException("Tariff is not exists");
+            throw new NotFoundException("Tariff is not exists");
         }
 
         repository.deleteById(id);
