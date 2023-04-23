@@ -1,10 +1,11 @@
 package com.application.billingsystem.billing;
 
+import com.application.billingsystem.annotations.BillingInfo;
 import com.application.billingsystem.dto.SubscriberReportDto;
 import com.application.billingsystem.entity.*;
-import com.application.billingsystem.file_handler.FileReaderHandler;
-import com.application.billingsystem.main.DateMapper;
-import com.application.billingsystem.main.FloatCompare;
+import com.application.billingsystem.file_handler.FileHandler;
+import com.application.billingsystem.utils.DateMapper;
+import com.application.billingsystem.utils.FloatCompare;
 import com.application.billingsystem.mapping.SubscriberReportMapper;
 import com.application.billingsystem.services.TariffService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +19,21 @@ public class HighPerformanceRatingServer implements BillingContract.HRS {
     private final TariffService tariffService;
     private final SubscriberReportMapper mapper = new SubscriberReportMapper();
     private final BillingContract.BRT<SubscriberReportDto> contractBrt;
+    private final FileHandler.Read fileRead;
 
     @Autowired
     public HighPerformanceRatingServer(
             TariffService tariffService,
-            BillingContract.BRT<SubscriberReportDto> contractBrt
+            BillingContract.BRT<SubscriberReportDto> contractBrt,
+            FileHandler.Read fileRead
     ) {
         this.tariffService = tariffService;
         this.contractBrt = contractBrt;
+        this.fileRead = fileRead;
     }
 
     @Override
+    @BillingInfo("Запущена сортировка звонков")
     public void run() {
         sortingSubscriberCalls();
     }
@@ -43,7 +48,7 @@ public class HighPerformanceRatingServer implements BillingContract.HRS {
         final Map<String, DataListEntity<CallDataRecordPlusEntity>> cdrPlusHashMap = new HashMap<>();
         /** Читаем CDR+ и получаем информацию в списке **/
         final List<CallDataRecordPlusEntity> callDataRecordPlusEntityList =
-                FileReaderHandler.readCDRPlusFileAndReturnListEntity();
+                fileRead.readCDRPlusFileAndReturnListEntity();
 
         TariffEntity tariff;
 
@@ -55,7 +60,7 @@ public class HighPerformanceRatingServer implements BillingContract.HRS {
                 if (tariffEntityHashMap.containsKey(entity.getTariffIndex())) {
                     tariff = tariffEntityHashMap.get(entity.getTariffIndex());
                 } else {
-                    tariff = tariffService.getTariff(entity.getTariffIndex());
+                    tariff = tariffService.getByIndex(entity.getTariffIndex());
                     tariffEntityHashMap.put(tariff.getTariffIndex(), tariff);
                 }
 
@@ -95,7 +100,10 @@ public class HighPerformanceRatingServer implements BillingContract.HRS {
     /**
      * Метод производит тарификацию абонента.
      * Метод расчитан на универсальность,
-     * но работает относительно тех тарифов, что даны по условию
+     * но работает относительно тех тарифов, что даны по условию.
+     * Мне очень понравилась идея, для каждого тарифа создавать свой класс,
+     * в котором будет производиться расчет, на вход он будет принимать List<CallDataRecordPlusEntity> entityList,
+     * а возвращать уже расчитанный отчет. Но т.к. сразу эта идея не пришла в голову, реализовал так.
      **/
     private SubscriberReportDto calculateSubscriberReportByTariff(
             List<CallDataRecordPlusEntity> entityList,
@@ -121,6 +129,19 @@ public class HighPerformanceRatingServer implements BillingContract.HRS {
                     entity.getStartTime(),
                     entity.getEndTime()
             ); // Продолжительность одного звонка
+            int minutesBefore; // Продолжительность минут до превышения лимита
+            int minutesAfter; // Продолжительность минут после превышения лимита
+
+            if(totalMinute >= tariff.getMinuteLimit()){
+                minutesAfter = minute;
+                minutesBefore = 0;
+            } else if ((totalMinute + minute) >= tariff.getMinuteLimit()){
+                minutesAfter = (totalMinute + minute) - tariff.getMinuteLimit();
+                minutesBefore = minute - minutesAfter;
+            } else {
+                minutesBefore = minute;
+                minutesAfter = 0;
+            }
 
             if (entity.getCallType().equals("01")) { // Проверка на тип звонка: входящий / исходящий
                 /** Стоимость звонка считается с учетом превышен ли лимит разговоров или нет.
@@ -128,14 +149,10 @@ public class HighPerformanceRatingServer implements BillingContract.HRS {
                  * если после превышения лимита, то стоимость = 1р/м, т.к. tariff.get...BetAfterLimit = 1 по условию.
                  * Пример 2: если поминутный, то tariff.getMinuteLimit() = 0, соответственно стоимость считается
                  * по параметру tariff.get...BetAfterLimit, который = 1.5 **/
-                cost = totalMinute >= tariff.getMinuteLimit() ?
-                        minute * tariff.getOutBetAfterLimit()
-                        : minute * tariff.getOutBetBeforeLimit();
+                cost = (minutesAfter * tariff.getOutBetAfterLimit()) + (minutesBefore * tariff.getOutBetBeforeLimit());
                 totalMinute += minute;
             } else {
-                cost = totalMinute >= tariff.getMinuteLimit() ?
-                        minute * tariff.getInBetAfterLimit()
-                        : minute * tariff.getInBetBeforeLimit();
+                cost = (minutesAfter * tariff.getInBetAfterLimit()) + (minutesBefore * tariff.getInBetBeforeLimit());
 
                 /** Тут идет оптимизация под тариф Обычный, т.к. входящие звонки бесплатные,
                  * соответственно как я понимаю их учитывать в лимит не стоит. **/
@@ -158,7 +175,6 @@ public class HighPerformanceRatingServer implements BillingContract.HRS {
                     )
             );
         }
-
         /** Дополнительное начисление к конечной стоимости исходя из абонентской платы **/
         totalCost += tariff.getSubscriberPayment();
         subscriberReport.setTotalCost(totalCost);
