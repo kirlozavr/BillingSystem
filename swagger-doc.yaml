@@ -1,0 +1,1492 @@
+openapi: 3.0.1
+info:
+  title: Billing System Api
+  description: >- 
+    В этом приложении осуществляется возможность производить тарификацию абонентов исходя из того, что они наговорили.
+  contact:
+    name: Protchenko Kirill
+    url: https://github.com/kirlozavr/BillingSystem
+    email: kirill.protchenko@mail.ru
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Generated server url
+tags:
+  - name: Звонок
+    description: >-
+      Контроллер позволяет выполнять основные crud операции с информацией о
+      звонках
+  - name: Запуск биллинговой системы
+    description: >-
+      Позволяет запускать процесс тарификации, при запуске создаются новые
+      звонки с помощью генератора
+  - name: Абонент
+    description: Контроллер позволяет выполнять основные crud операции с абонентами
+  - name: Отчет абонента
+    description: Контроллер позволяет выполнять основные crud операции с отчетоми абонентов
+  - name: Платеж
+    description: Контроллер позволяет выполнять основные crud операции с платежами
+  - name: Изменение тарифа у абонента
+    description: >-
+      Контроллер позволяет выполнять основные crud операции с изменением тарифа
+      у абонента
+  - name: Тариф
+    description: Контроллер отвечает за crud операции с тарифами
+paths:
+  /*/tariff/:
+    put:
+      tags:
+        - Тариф
+      summary: Обновить тариф
+      operationId: put
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TariffDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+    post:
+      tags:
+        - Тариф
+      summary: Создать новый тариф
+      operationId: post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TariffCreateDto'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+  /*/subscriber/:
+    get:
+      tags:
+        - Абонент
+      summary: Получить всех абонентов
+      operationId: getAll_1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubscriberDto'
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+    put:
+      tags:
+        - Абонент
+      summary: Изменить абонента
+      operationId: put_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriberDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+    post:
+      tags:
+        - Абонент
+      summary: Создать нового абонента
+      operationId: post_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriberCreateDto'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+  /*/report/{id}:
+    put:
+      parameters:
+        - name: id
+          in: path
+          description: Id звонка
+          required: true
+          schema:
+            title: long
+      tags:
+        - Отчет абонента
+      summary: >-
+        Обновить отчет абонента, если в отчете изменится стоимость услуг - то
+        измениться баланс абонента
+      operationId: put_2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriberReportDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+    delete:
+      tags:
+        - Отчет абонента
+      summary: Удалить отчет по id
+      operationId: delete_2
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+  /*/payment/:
+    get:
+      tags:
+        - Платеж
+      summary: Получить все платежи
+      operationId: getAll_3
+      responses:
+        '200':
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentDto'
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+    put:
+      tags:
+        - Платеж
+      summary: >-
+        Изменить платеж, при изменении платежа - у абонента изменяется баланс с
+        учетом предыдущего платежа
+      operationId: put_3
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+    post:
+      tags:
+        - Платеж
+      summary: >-
+        Создать новый платеж, при создании платежа - у абонента изменяется
+        баланс
+      operationId: post_3
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentCreateDto'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+  /*/payload/:
+    get:
+      tags:
+        - Звонок
+      summary: Получить все звонки
+      operationId: getAll_4
+      responses:
+        '200':
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PayloadDto'
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+    put:
+      tags:
+        - Звонок
+      summary: Изменить информацию о звонке
+      operationId: put_4
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PayloadDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+    post:
+      tags:
+        - Звонок
+      summary: Создать новый звонок
+      operationId: post_4
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PayloadCreateDto'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+  /*/changeTariff/:
+    get:
+      tags:
+        - Изменение тарифа у абонента
+      summary: Получить всю информацию об изменении тарифа
+      operationId: getAll_5
+      responses:
+        '200':
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChangeSubscriberTariffDto'
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+    put:
+      tags:
+        - Изменение тарифа у абонента
+      summary: >-
+        Изменить информацию о смене тарифа, при изменении - изменится тариф у
+        абонента
+      operationId: put_5
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeSubscriberTariffDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+    post:
+      tags:
+        - Изменение тарифа у абонента
+      summary: >-
+        Создать новое изменение тарифа, при создании - изменится тариф у
+        абонента
+      operationId: post_5
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeSubscriberTariffCreateDto'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+  /*/report/:
+    get:
+      tags:
+        - Отчет абонента
+      summary: Получить все отчеты всех абонентов
+      operationId: getAll_2
+      responses:
+        '200':
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubscriberReportDto'
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+    post:
+      tags:
+        - Отчет абонента
+      summary: >-
+        Создать новый отчет абонента, при создании отчета - изменяется баланс
+        абонента
+      operationId: post_2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriberReportDto'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+  /*/tariff/index={index}:
+    get:
+      tags:
+        - Тариф
+      summary: Получить тариф по индексу
+      operationId: findByIndex
+      parameters:
+        - name: index
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/TariffDto'
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+  /*/tariff/id={id}:
+    get:
+      tags:
+        - Тариф
+      summary: Получить тариф по id
+      operationId: findById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/TariffDto'
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+  /*/tariff/all/:
+    get:
+      tags:
+        - Тариф
+      summary: Получить все тарифы
+      operationId: getAll
+      responses:
+        '200':
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TariffDto'
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+  /*/subscriber/numberPhoneAndPositiveBalance={numberPhone}:
+    get:
+      tags:
+        - Абонент
+      summary: Получить абонента по номеру телефона, у которого баланс больше 0
+      operationId: findByNumberPhoneAndPositiveBalance
+      parameters:
+        - name: numberPhone
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/SubscriberDto'
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+  /*/subscriber/numberPhone={numberPhone}:
+    get:
+      tags:
+        - Абонент
+      summary: Получить абонента по номеру телефона
+      operationId: findByNumberPhone
+      parameters:
+        - name: numberPhone
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/SubscriberDto'
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+  /*/subscriber/id={id}:
+    get:
+      tags:
+        - Абонент
+      summary: Получить абонента по id
+      operationId: findById_1
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/SubscriberDto'
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+  /*/report/id={id}:
+    get:
+      tags:
+        - Отчет абонента
+      summary: Получить отчет по id
+      operationId: findById_2
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/SubscriberReportDto'
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+  /*/report/all/numberPhone={numberPhone}:
+    get:
+      tags:
+        - Отчет абонента
+      summary: Получить все отчеты абонента по номеру телефона
+      operationId: getAllByNumberPhone
+      parameters:
+        - name: numberPhone
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubscriberReportDto'
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+  /*/payment/id={id}:
+    get:
+      tags:
+        - Платеж
+      summary: Получить платеж по id
+      operationId: findById_3
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/PaymentDto'
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+  /*/payment/all/numberPhone={numberPhone}:
+    get:
+      tags:
+        - Платеж
+      summary: Получить все платежи абонента по номеру телефона
+      operationId: getAllByNumberPhone_1
+      parameters:
+        - name: numberPhone
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentDto'
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+  /*/payload/id={id}:
+    get:
+      tags:
+        - Звонок
+      summary: Получить звонок по id
+      operationId: findById_4
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/PayloadDto'
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+  /*/changeTariff/numberPhone={numberPhone}:
+    get:
+      tags:
+        - Изменение тарифа у абонента
+      summary: >-
+        Получить всю информацию об изменении тарифов у абонента по номеру
+        телефона
+      operationId: getAllByNumberPhone_2
+      parameters:
+        - name: numberPhone
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChangeSubscriberTariffDto'
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+  /*/changeTariff/id={id}:
+    get:
+      tags:
+        - Изменение тарифа у абонента
+      summary: Получить информацию об изменении тарифа по id
+      operationId: findById_5
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ChangeSubscriberTariffDto'
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+  /*/billing/run:
+    get:
+      tags:
+        - Запуск биллинговой системы
+      summary: Запускает тарификацию
+      operationId: run
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+  /*/tariff/{id}:
+    delete:
+      tags:
+        - Тариф
+      summary: Удалить тариф по id
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+  /*/subscriber/{id}:
+    delete:
+      tags:
+        - Абонент
+      summary: Удалить абонента по id
+      operationId: delete_1
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+  /*/payment/{id}:
+    delete:
+      tags:
+        - Платеж
+      summary: Удалить платеж по id
+      operationId: delete_3
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+  /*/payload/{id}:
+    delete:
+      tags:
+        - Звонок
+      summary: Удалить звонок по id
+      operationId: delete_4
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+  /*/changeTariff/{id}:
+    delete:
+      tags:
+        - Изменение тарифа у абонента
+      summary: Удалить информацию об изменении тарифа по id
+      operationId: delete_5
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Некорректно введены данные
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '404':
+          description: Объект не найден
+          content:
+            application/hal+json:
+              schema:
+                type: string
+        '409':
+          description: Объект уже существует
+          content:
+            application/hal+json:
+              schema:
+                type: string
+components:
+  schemas:
+    TariffDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        tariffIndex:
+          type: string
+        nameTariff:
+          type: string
+        minuteLimit:
+          type: integer
+          format: int32
+        outBetBeforeLimit:
+          type: number
+          format: float
+        outBetAfterLimit:
+          type: number
+          format: float
+        inBetBeforeLimit:
+          type: number
+          format: float
+        inBetAfterLimit:
+          type: number
+          format: float
+        subscriberPayment:
+          type: integer
+          format: int32
+    SubscriberDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        numberPhone:
+          type: string
+        tariffIndex:
+          type: string
+        balance:
+          type: integer
+          format: int64
+    SubscriberReportDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        numberPhone:
+          type: string
+        tariffIndex:
+          type: string
+        payloads:
+          type: array
+          items:
+            $ref: '#/components/schemas/PayloadDto'
+        totalCost:
+          type: number
+          format: float
+        monetaryUnit:
+          type: string
+    PaymentDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        numberPhone:
+          type: string
+        money:
+          type: integer
+          format: int64
+    PayloadDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        callType:
+          type: string
+        startTime:
+          type: string
+        endTime:
+          type: string
+        duration:
+          type: string
+        cost:
+          type: number
+          format: float
+    ChangeSubscriberTariffDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        numberPhone:
+          type: string
+        tariffIndex:
+          type: string
+    TariffCreateDto:
+      type: object
+      properties:
+        tariffIndex:
+          type: string
+        nameTariff:
+          type: string
+        minuteLimit:
+          type: integer
+          format: int32
+        outBetBeforeLimit:
+          type: number
+          format: float
+        outBetAfterLimit:
+          type: number
+          format: float
+        inBetBeforeLimit:
+          type: number
+          format: float
+        inBetAfterLimit:
+          type: number
+          format: float
+        subscriberPayment:
+          type: integer
+          format: int32
+        monetaryUnit:
+          type: string
+    SubscriberCreateDto:
+      type: object
+      properties:
+        numberPhone:
+          type: string
+        tariffIndex:
+          type: string
+        balance:
+          type: integer
+          format: int64
+    PaymentCreateDto:
+      type: object
+      properties:
+        numberPhone:
+          type: string
+        money:
+          type: integer
+          format: int64
+    PayloadCreateDto:
+      type: object
+      properties:
+        callType:
+          type: string
+        startTime:
+          type: string
+        endTime:
+          type: string
+        duration:
+          type: string
+        cost:
+          type: number
+          format: float
+    ChangeSubscriberTariffCreateDto:
+      type: object
+      properties:
+        numberPhone:
+          type: string
+        tariffIndex:
+          type: string

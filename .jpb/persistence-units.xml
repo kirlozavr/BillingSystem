@@ -4,7 +4,7 @@
     <persistence-units>
       <persistence-unit name="Default" defaultSearchScope="Project">
         <packages>
-          <package value="com.application.billingsystem.main" />
+          <package value="com.application.billingsystem.utils" />
           <package value="com.application.billingsystem.entity" />
         </packages>
       </persistence-unit>
