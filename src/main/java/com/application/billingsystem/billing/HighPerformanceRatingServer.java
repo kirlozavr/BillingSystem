@@ -181,5 +181,10 @@ public class HighPerformanceRatingServer implements BillingContract.HRS {
 
         return mapper.getEntityToDto(subscriberReport);
     }
+
+    /** Тут будет новая логика расчета услуг **/
+    private SubscriberReportDto calculateSubscriberReportByTariff(List<CallDataRecordPlusEntity> entityList) {
+        return null;
+    }
 }
 
