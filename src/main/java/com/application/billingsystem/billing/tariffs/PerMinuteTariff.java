@@ -4,7 +4,6 @@ import com.application.billingsystem.dto.SubscriberReportDto;
 import com.application.billingsystem.entity.CallDataRecordPlusEntity;
 import com.application.billingsystem.entity.PayloadEntity;
 import com.application.billingsystem.entity.SubscriberReportEntity;
-import com.application.billingsystem.mapping.SubscriberReportMapper;
 import com.application.billingsystem.utils.DateMapper;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +15,6 @@ public class PerMinuteTariff implements Tariff{
     private static final String TARIFF_INDEX = "03";
     private static final String MONETARY_UNIT = "rubles";
     private static final float COST_PER_MINUTE = 1.5f;
-    private static final SubscriberReportMapper MAPPER = new SubscriberReportMapper();
 
     @Override
     public SubscriberReportDto calculate(List<CallDataRecordPlusEntity> entityList) {
