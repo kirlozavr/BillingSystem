@@ -25,7 +25,7 @@ public class TariffEntity {
             generator = "tariff_id_seq"
     )
     private long id;
-    private String tariffIndex; // id тарифа
+    private String tariffIndex; // индекс тарифа
     private String nameTariff; //Название тарифа
     private int minuteLimit; // Лимит минут
     private float outBetBeforeLimit; // Ставка на исходящие звонки до превышения лимита
