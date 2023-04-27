@@ -15,7 +15,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("*/payload")
-@Tag(name = "Звонок", description = "Контроллер позволяет выполнять основные crud операции с информацией о звонках")
+@Tag(
+        name = "Звонок",
+        description = "Контроллер позволяет выполнять основные crud операции с информацией о звонках"
+)
 public class PayloadController {
 
     private final PayloadService service;

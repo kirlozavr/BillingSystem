@@ -16,7 +16,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("*/changeTariff")
-@Tag(name = "Изменение тарифа у абонента", description = "Контроллер позволяет выполнять основные crud операции с изменением тарифа у абонента")
+@Tag(
+        name = "Изменение тарифа у абонента",
+        description = "Контроллер позволяет выполнять основные crud операции " +
+                "с изменением тарифа у абонента"
+)
 public class ChangeSubscriberTariffController {
 
     private final ChangeSubscriberTariffService service;

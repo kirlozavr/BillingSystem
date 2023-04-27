@@ -18,7 +18,10 @@ import java.util.List;
 
 @Controller
 @RequestMapping("*/billing")
-@Tag(name = "Запуск биллинговой системы", description = "Позволяет запускать процесс тарификации, при запуске создаются новые звонки с помощью генератора")
+@Tag(
+        name = "Запуск биллинговой системы",
+        description = "Позволяет запускать процесс тарификации, при запуске создаются новые звонки с помощью генератора"
+)
 public class CallDataRecordService implements BillingContract.CDR {
 
     private final BillingContract.BRT<SubscriberReportDto> contractBrt;

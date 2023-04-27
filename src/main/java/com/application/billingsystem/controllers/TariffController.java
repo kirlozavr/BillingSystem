@@ -14,7 +14,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("*/tariff")
-@Tag(name = "Тариф", description = "Контроллер отвечает за crud операции с тарифами")
+@Tag(
+        name = "Тариф",
+        description = "Контроллер отвечает за crud операции с тарифами"
+)
 public class TariffController {
     private final TariffService service;
     private final TariffMapper mapper = new TariffMapper();

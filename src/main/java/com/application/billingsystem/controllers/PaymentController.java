@@ -16,7 +16,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("*/payment")
-@Tag(name = "Платеж", description = "Контроллер позволяет выполнять основные crud операции с платежами")
+@Tag(
+        name = "Платеж",
+        description = "Контроллер позволяет выполнять основные crud операции с платежами"
+)
 public class PaymentController {
 
     private final PaymentService service;

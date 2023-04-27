@@ -14,7 +14,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("*/subscriber")
-@Tag(name = "Абонент", description = "Контроллер позволяет выполнять основные crud операции с абонентами")
+@Tag(
+        name = "Абонент",
+        description = "Контроллер позволяет выполнять основные crud операции с абонентами"
+)
 public class SubscriberController {
 
     private final SubscriberService service;

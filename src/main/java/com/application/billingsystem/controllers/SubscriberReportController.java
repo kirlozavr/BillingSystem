@@ -16,7 +16,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("*/report")
-@Tag(name = "Отчет абонента", description ="Контроллер позволяет выполнять основные crud операции с отчетоми абонентов")
+@Tag(
+        name = "Отчет абонента",
+        description ="Контроллер позволяет выполнять основные crud операции с отчетоми абонентов"
+)
 public class SubscriberReportController {
 
     private final SubscriberReportService service;
