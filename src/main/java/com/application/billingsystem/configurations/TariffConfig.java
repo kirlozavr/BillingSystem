@@ -9,13 +9,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Configuration
 public class TariffConfig {
 
     @Bean
     @Transactional
-    public CommandLineRunner commandLineTariff(TariffRepository tariffRepository){
+    public CommandLineRunner commandLineTariff(TariffRepository tariffRepository) {
         return args -> {
             tariffRepository.save(new TariffEntity(
                     "06",
@@ -68,6 +71,14 @@ public class TariffConfig {
                             null
                     )
             ));
+
+            List<TariffInfoOperatorEntity> operatorEntities = new ArrayList<>();
+            operatorEntities.add(
+                    new TariffInfoOperatorEntity(
+                            "Ромашка",
+                            0.0f,
+                            0.0f
+                    ));
             tariffRepository.save(new TariffEntity(
                     "01",
                     "Тариф Х",
@@ -77,14 +88,11 @@ public class TariffConfig {
                     new TariffInfoEntity(
                             100,
                             0.0f,
+                            1.5f,
                             0.0f,
-                            0.0f,
-                            0.0f,
+                            1.5f,
                             0,
-                            new TariffInfoOperatorEntity(
-                                    1.5f,
-                                    1.5f
-                            ),
+                            operatorEntities,
                             null
                     )
             ));

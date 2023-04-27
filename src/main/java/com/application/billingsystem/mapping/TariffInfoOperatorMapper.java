@@ -10,6 +10,7 @@ public class TariffInfoOperatorMapper
     public TariffInfoOperatorDto getEntityToDto(TariffInfoOperatorEntity entity) {
         return new TariffInfoOperatorDto(
                 entity.getId(),
+                entity.getTargetNameOperator(),
                 entity.getOutBetAnotherOperator(),
                 entity.getInBetAnotherOperator()
         );
@@ -18,6 +19,7 @@ public class TariffInfoOperatorMapper
     @Override
     public TariffInfoOperatorEntity getDtoToEntity(TariffInfoOperatorDto dto) {
         return new TariffInfoOperatorEntity(
+                dto.getTargetNameOperator(),
                 dto.getOutBetAnotherOperator(),
                 dto.getInBetAnotherOperator()
         );
@@ -25,6 +27,7 @@ public class TariffInfoOperatorMapper
 
     public TariffInfoOperatorEntity getCreateDtoToEntity(TariffInfoOperatorCreateDto createDto){
         return new TariffInfoOperatorEntity(
+                createDto.getTargetNameOperator(),
                 createDto.getOutBetAnotherOperator(),
                 createDto.getInBetAnotherOperator()
         );

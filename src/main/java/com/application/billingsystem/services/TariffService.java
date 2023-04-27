@@ -82,8 +82,17 @@ public class TariffService {
         if (entity.getTariffIndex() == null) {
             throw new IncorrectArgumentException("Индекс тарифа не указан");
         }
+        if (entity.getNameOperator() == null) {
+            throw new IncorrectArgumentException("Название оператора не указано");
+        }
+        if (entity.getNameLocation() == null) {
+            throw new IncorrectArgumentException("Название локации для тарифа не указано");
+        }
         if (entity.getMonetaryUnit() == null) {
             throw new IncorrectArgumentException("Денежная единица не указана");
+        }
+        if (entity.getTariffInfo() == null) {
+            throw new IncorrectArgumentException("Информация о стоимости услуг не указана");
         }
     }
 }

@@ -1,7 +1,9 @@
 package com.application.billingsystem.services;
 
+import com.application.billingsystem.entity.TariffInfoLocationEntity;
 import com.application.billingsystem.entity.TariffInfoOperatorEntity;
 import com.application.billingsystem.exceptions.AlreadyExistsException;
+import com.application.billingsystem.exceptions.IncorrectArgumentException;
 import com.application.billingsystem.exceptions.NotFoundException;
 import com.application.billingsystem.repositories.TariffInfoOperatorRepository;
 import com.application.billingsystem.utils.ValidationUtils;
@@ -34,6 +36,7 @@ public class TariffInfoOperatorService {
 
     @Transactional
     public void create(TariffInfoOperatorEntity tariffInfoOperator) {
+        validate(tariffInfoOperator);
 
         var exists = repository.existsById(tariffInfoOperator.getId());
 
@@ -46,6 +49,7 @@ public class TariffInfoOperatorService {
 
     @Transactional
     public void update(TariffInfoOperatorEntity tariffInfoOperator) {
+        validate(tariffInfoOperator);
 
         if (!repository.existsById(tariffInfoOperator.getId())) {
             throw new NotFoundException("Tariff information about operator not found");
@@ -63,5 +67,11 @@ public class TariffInfoOperatorService {
         }
 
         repository.deleteById(id);
+    }
+
+    private void validate(TariffInfoOperatorEntity entity) {
+        if (entity.getTargetNameOperator() == null) {
+            throw new IncorrectArgumentException("Название оператора для которого будут особые условия не указано");
+        }
     }
 }

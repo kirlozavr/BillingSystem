@@ -17,8 +17,8 @@ public class TariffInfoMapper
                 entity.getInBetBeforeLimit(),
                 entity.getInBetAfterLimit(),
                 entity.getSubscriberPayment(),
-                entity.getTariffInfoOperator(),
-                entity.getTariffInfoLocation()
+                entity.getTariffInfoOperators(),
+                entity.getTariffInfoLocations()
         );
     }
 
@@ -31,8 +31,8 @@ public class TariffInfoMapper
                 dto.getInBetBeforeLimit(),
                 dto.getInBetAfterLimit(),
                 dto.getSubscriberPayment(),
-                dto.getTariffInfoOperator(),
-                dto.getTariffInfoLocation()
+                dto.getTariffInfoOperators(),
+                dto.getTariffInfoLocations()
         );
     }
 
@@ -44,8 +44,8 @@ public class TariffInfoMapper
                 createDto.getInBetBeforeLimit(),
                 createDto.getInBetAfterLimit(),
                 createDto.getSubscriberPayment(),
-                createDto.getTariffInfoOperator(),
-                createDto.getTariffInfoLocation()
+                createDto.getTariffInfoOperators(),
+                createDto.getTariffInfoLocations()
         );
     }
 }

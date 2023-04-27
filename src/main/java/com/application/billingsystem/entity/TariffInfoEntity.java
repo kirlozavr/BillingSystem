@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -30,12 +32,12 @@ public class TariffInfoEntity {
     private float inBetAfterLimit; // Ставка на входящие звонки после превышения лимита
     private int subscriberPayment; // Абонентская плата
     /** Информация о стоимости услуг при звонках другому оператору **/
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private TariffInfoOperatorEntity tariffInfoOperator;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<TariffInfoOperatorEntity> tariffInfoOperators;
 
     /** Информация о стоимости услуг при звонках на другую локацию **/
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private TariffInfoLocationEntity tariffInfoLocation;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<TariffInfoLocationEntity> tariffInfoLocations;
 
     public TariffInfoEntity(){}
 
@@ -46,8 +48,8 @@ public class TariffInfoEntity {
             float inBetBeforeLimit,
             float inBetAfterLimit,
             int subscriberPayment,
-            TariffInfoOperatorEntity tariffInfoOperator,
-            TariffInfoLocationEntity tariffInfoLocation
+            List<TariffInfoOperatorEntity> tariffInfoOperators,
+            List<TariffInfoLocationEntity> tariffInfoLocations
     ) {
         this.minuteLimit = minuteLimit;
         this.outBetBeforeLimit = outBetBeforeLimit;
@@ -55,7 +57,7 @@ public class TariffInfoEntity {
         this.inBetBeforeLimit = inBetBeforeLimit;
         this.inBetAfterLimit = inBetAfterLimit;
         this.subscriberPayment = subscriberPayment;
-        this.tariffInfoOperator = tariffInfoOperator;
-        this.tariffInfoLocation = tariffInfoLocation;
+        this.tariffInfoOperators = tariffInfoOperators;
+        this.tariffInfoLocations = tariffInfoLocations;
     }
 }

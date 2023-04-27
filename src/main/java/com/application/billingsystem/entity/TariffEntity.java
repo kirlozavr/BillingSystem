@@ -28,7 +28,7 @@ public class TariffEntity {
     private String tariffIndex; // индекс тарифа
     private String nameTariff; //Название тарифа
     private String nameOperator; //Название оператора
-    private String targetLocation; //Локация, для которой предназначен тариф
+    private String nameLocation; //Локация, для которой предназначен тариф
     private String monetaryUnit;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private TariffInfoEntity tariffInfo;
@@ -39,14 +39,14 @@ public class TariffEntity {
             String tariffIndex,
             String nameTariff,
             String nameOperator,
-            String targetLocation,
+            String nameLocation,
             String monetaryUnit,
             TariffInfoEntity tariffInfo
     ) {
         this.tariffIndex = tariffIndex;
         this.nameTariff = nameTariff;
         this.nameOperator = nameOperator;
-        this.targetLocation = targetLocation;
+        this.nameLocation = nameLocation;
         this.monetaryUnit = monetaryUnit;
         this.tariffInfo = tariffInfo;
     }

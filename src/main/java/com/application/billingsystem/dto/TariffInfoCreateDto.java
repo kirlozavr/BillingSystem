@@ -4,6 +4,8 @@ import com.application.billingsystem.entity.TariffInfoLocationEntity;
 import com.application.billingsystem.entity.TariffInfoOperatorEntity;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class TariffInfoCreateDto {
 
@@ -13,6 +15,6 @@ public class TariffInfoCreateDto {
     private float inBetBeforeLimit; // Ставка на входящие звонки до превышения лимита
     private float inBetAfterLimit; // Ставка на входящие звонки после превышения лимита
     private int subscriberPayment; // Абонентская плата
-    private TariffInfoOperatorEntity tariffInfoOperator;
-    private TariffInfoLocationEntity tariffInfoLocation;
+    private List<TariffInfoOperatorEntity> tariffInfoOperators;
+    private List<TariffInfoLocationEntity> tariffInfoLocations;
 }

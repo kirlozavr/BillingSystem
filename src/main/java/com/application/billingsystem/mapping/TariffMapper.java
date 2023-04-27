@@ -13,7 +13,7 @@ public class TariffMapper implements Mapper<TariffEntity, TariffDto> {
                 entity.getTariffIndex(),
                 entity.getNameTariff(),
                 entity.getNameOperator(),
-                entity.getTargetLocation(),
+                entity.getNameLocation(),
                 entity.getMonetaryUnit(),
                 entity.getTariffInfo()
         );
@@ -25,7 +25,7 @@ public class TariffMapper implements Mapper<TariffEntity, TariffDto> {
                 dto.getTariffIndex(),
                 dto.getNameTariff(),
                 dto.getNameOperator(),
-                dto.getTargetLocation(),
+                dto.getNameLocation(),
                 dto.getMonetaryUnit(),
                 dto.getTariffInformation()
         );
@@ -36,7 +36,7 @@ public class TariffMapper implements Mapper<TariffEntity, TariffDto> {
                 createDto.getTariffIndex(),
                 createDto.getNameTariff(),
                 createDto.getNameOperator(),
-                createDto.getTargetLocation(),
+                createDto.getNameLocation(),
                 createDto.getMonetaryUnit(),
                 createDto.getTariffInformation()
         );

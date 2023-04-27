@@ -10,6 +10,7 @@ public class TariffInfoLocationMapper
     public TariffInfoLocationDto getEntityToDto(TariffInfoLocationEntity entity) {
         return new TariffInfoLocationDto(
                 entity.getId(),
+                entity.getTargetNameLocation(),
                 entity.getOutBetAnotherLocation(),
                 entity.getInBetAnotherLocation()
         );
@@ -18,6 +19,7 @@ public class TariffInfoLocationMapper
     @Override
     public TariffInfoLocationEntity getDtoToEntity(TariffInfoLocationDto dto) {
         return new TariffInfoLocationEntity(
+                dto.getTargetNameLocation(),
                 dto.getOutBetAnotherLocation(),
                 dto.getInBetAnotherLocation()
         );
@@ -25,6 +27,7 @@ public class TariffInfoLocationMapper
 
     public TariffInfoLocationEntity getCreateDtoToEntity(TariffInfoLocationCreateDto createDto){
         return new TariffInfoLocationEntity(
+                createDto.getTargetNameLocation(),
                 createDto.getOutBetAnotherLocation(),
                 createDto.getInBetAnotherLocation()
         );

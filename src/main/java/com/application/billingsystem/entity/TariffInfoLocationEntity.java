@@ -23,12 +23,14 @@ public class TariffInfoLocationEntity {
             generator = "tariff_info_location_id_seq"
     )
     private long id;
+    private String targetNameLocation; // Название локации для которой особые условия
     private float outBetAnotherLocation; // Ставка на исходящие звонки на другую локацию
     private float inBetAnotherLocation; // Ставка на входящие звонки на другую локацию
 
     public TariffInfoLocationEntity(){}
 
-    public TariffInfoLocationEntity(float outBetAnotherLocation, float inBetAnotherLocation) {
+    public TariffInfoLocationEntity(String targetNameLocation, float outBetAnotherLocation, float inBetAnotherLocation) {
+        this.targetNameLocation = targetNameLocation;
         this.outBetAnotherLocation = outBetAnotherLocation;
         this.inBetAnotherLocation = inBetAnotherLocation;
     }

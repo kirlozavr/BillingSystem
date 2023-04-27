@@ -1,6 +1,5 @@
 package com.application.billingsystem.entity;
 
-import com.application.billingsystem.dto.TariffInfoOperatorCreateDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,12 +23,14 @@ public class TariffInfoOperatorEntity {
             generator = "tariff_info_operator_id_seq"
     )
     private long id;
+    private String targetNameOperator; // Название оператора для которого особые условия
     private float outBetAnotherOperator; // Ставка на исходящие звонки другому оператору
     private float inBetAnotherOperator; // Ставка на входящие звонки другому оператору
 
     public TariffInfoOperatorEntity(){}
 
-    public TariffInfoOperatorEntity(float outBetAnotherOperator, float inBetAnotherOperator) {
+    public TariffInfoOperatorEntity(String targetNameOperator, float outBetAnotherOperator, float inBetAnotherOperator) {
+        this.targetNameOperator = targetNameOperator;
         this.outBetAnotherOperator = outBetAnotherOperator;
         this.inBetAnotherOperator = inBetAnotherOperator;
     }
