@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
  * Общение происходит посредством контракта,
  * который имплементируют классы, которые должны взаимодействовать. Основной подход в андроид.
  **/
-@Component
+
 public interface BillingContract {
 
     interface CDR{
