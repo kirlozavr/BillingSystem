@@ -3,7 +3,6 @@ package com.application.billingsystem.mapping;
 import com.application.billingsystem.dto.TariffCreateDto;
 import com.application.billingsystem.dto.TariffDto;
 import com.application.billingsystem.entity.TariffEntity;
-import com.application.billingsystem.mapping.Mapper;
 
 public class TariffMapper implements Mapper<TariffEntity, TariffDto> {
 
@@ -13,12 +12,10 @@ public class TariffMapper implements Mapper<TariffEntity, TariffDto> {
                 entity.getId(),
                 entity.getTariffIndex(),
                 entity.getNameTariff(),
-                entity.getMinuteLimit(),
-                entity.getOutBetBeforeLimit(),
-                entity.getOutBetAfterLimit(),
-                entity.getInBetBeforeLimit(),
-                entity.getInBetAfterLimit(),
-                entity.getSubscriberPayment()
+                entity.getNameOperator(),
+                entity.getTargetLocation(),
+                entity.getMonetaryUnit(),
+                entity.getTariffInfo()
         );
     }
 
@@ -27,13 +24,10 @@ public class TariffMapper implements Mapper<TariffEntity, TariffDto> {
         return new TariffEntity(
                 dto.getTariffIndex(),
                 dto.getNameTariff(),
-                dto.getMinuteLimit(),
-                dto.getOutBetBeforeLimit(),
-                dto.getOutBetAfterLimit(),
-                dto.getInBetBeforeLimit(),
-                dto.getInBetAfterLimit(),
-                dto.getSubscriberPayment(),
-                null
+                dto.getNameOperator(),
+                dto.getTargetLocation(),
+                dto.getMonetaryUnit(),
+                dto.getTariffInformation()
         );
     }
 
@@ -41,13 +35,10 @@ public class TariffMapper implements Mapper<TariffEntity, TariffDto> {
         return new TariffEntity(
                 createDto.getTariffIndex(),
                 createDto.getNameTariff(),
-                createDto.getMinuteLimit(),
-                createDto.getOutBetBeforeLimit(),
-                createDto.getOutBetAfterLimit(),
-                createDto.getInBetBeforeLimit(),
-                createDto.getInBetAfterLimit(),
-                createDto.getSubscriberPayment(),
-                createDto.getMonetaryUnit()
+                createDto.getNameOperator(),
+                createDto.getTargetLocation(),
+                createDto.getMonetaryUnit(),
+                createDto.getTariffInformation()
         );
     }
 }

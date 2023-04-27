@@ -1,5 +1,6 @@
 package com.application.billingsystem.dto;
 
+import com.application.billingsystem.entity.TariffInfoEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -10,10 +11,8 @@ public class TariffCreateDto {
     private String tariffIndex; // id тарифа
     private String nameTariff; //Название тарифа
     private int minuteLimit; // Лимит минут
-    private float outBetBeforeLimit; // Ставка на исходящие звонки до превышения лимита
-    private float outBetAfterLimit; // Ставка на исходящие звонки после превышения лимита
-    private float inBetBeforeLimit; // Ставка на входящие звонки до превышения лимита
-    private float inBetAfterLimit; // Ставка на входящие звонки после превышения лимита
-    private int subscriberPayment; // Абонентская плата
+    private String nameOperator; //Название оператора
+    private String targetLocation; //Локация, для которой предназначен тариф
     private String monetaryUnit;
+    private TariffInfoEntity tariffInformation;
 }
