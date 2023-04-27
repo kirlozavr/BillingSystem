@@ -5,11 +5,9 @@ import com.application.billingsystem.entity.CallDataRecordPlusEntity;
 import com.application.billingsystem.entity.PayloadEntity;
 import com.application.billingsystem.entity.SubscriberReportEntity;
 import com.application.billingsystem.utils.DateMapper;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
 public class UnlimitedTariff implements Tariff {
 
     private static final String TARIFF_INDEX = "06";
