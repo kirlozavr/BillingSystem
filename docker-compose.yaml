@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  postgres:
+    image: 'postgres:15-alpine'
+    container_name: 'billing'
+    environment:
+        POSTGRES_USER: 'postgres'
+        POSTGRES_PASSWORD: 'postgres'
+        POSTGRES_DB: 'postgres'
+  app:
+    build: ./
+    container_name: 'billing-app'
+    ports:
+      - '8080:8080'
